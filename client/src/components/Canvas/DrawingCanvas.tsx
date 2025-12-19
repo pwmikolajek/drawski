@@ -47,7 +47,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     if (!socket || !context) return;
 
     const handleDrawingBatch = (events: DrawingEvent[]) => {
-      events.forEach((event, index) => {
+      events.forEach((event) => {
         // Update tool if provided
         if (event.color) {
           context.strokeStyle = event.color;

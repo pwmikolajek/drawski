@@ -50,11 +50,11 @@ function App() {
     };
   }, [socket]);
 
-  const handleRoomCreated = (code: string) => {
+  const handleRoomCreated = (_code: string) => {
     // This will be handled by the socket event listener
   };
 
-  const handleRoomJoined = (code: string) => {
+  const handleRoomJoined = (_code: string) => {
     // This will be handled by the socket event listener
   };
 

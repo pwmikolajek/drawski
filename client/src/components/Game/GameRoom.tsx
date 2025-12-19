@@ -118,7 +118,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
     });
 
     // Listen for word selected
-    socket.on('word:selected', ({ displayWord: word, wordLength, actualWord, difficulty }) => {
+    socket.on('word:selected', ({ displayWord: word, actualWord, difficulty }) => {
       setDisplayWord(word);
       setWordOptions([]);
       setCurrentWordDifficulty(difficulty);
@@ -189,7 +189,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
     });
 
     // Listen for powerup events
-    socket.on('powerup:purchased', ({ powerupId, powerups, score }) => {
+    socket.on('powerup:purchased', ({ powerups, score }) => {
       setPlayers(prevPlayers =>
         prevPlayers.map(p =>
           p.socketId === socket.id ? { ...p, powerups, score } : p
@@ -198,7 +198,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
       toast.success('Powerup purchased!', { icon: '🛒' });
     });
 
-    socket.on('powerup:activated', ({ powerupId, powerups, activeEffects: effects }) => {
+    socket.on('powerup:activated', ({ powerups, activeEffects: effects }) => {
       setPlayers(prevPlayers =>
         prevPlayers.map(p =>
           p.socketId === socket.id ? { ...p, powerups, activeEffects: effects } : p
@@ -207,7 +207,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
       toast.success('Powerup activated!', { icon: '⚡' });
     });
 
-    socket.on('powerup:awarded', ({ powerupId, powerupName }) => {
+    socket.on('powerup:awarded', ({ powerupName }) => {
       toast.success(`You earned a free powerup: ${powerupName}!`, { icon: '🎁', duration: 4000 });
     });
 
@@ -342,7 +342,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                 players={players}
                 currentUserId={socket?.id}
                 hostId={hostId || undefined}
-                currentDrawerId={gameState?.currentDrawer}
+                currentDrawerId={gameState?.currentDrawer || undefined}
               />
 
               {/* Start Game Button (Host Only) */}

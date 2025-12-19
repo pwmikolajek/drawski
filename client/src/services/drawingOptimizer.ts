@@ -6,7 +6,6 @@ class DrawingOptimizer {
   private eventQueue: DrawingEvent[] = [];
   private batchInterval: number = 16; // 60fps
   private intervalId: number | null = null;
-  private lastPoint: Point | null = null;
   private currentTool: { color: string; size: number } = {
     color: '#000000',
     size: 5,
