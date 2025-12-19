@@ -6,7 +6,7 @@ class DrawingOptimizer {
   private eventQueue: DrawingEvent[] = [];
   private batchInterval: number = 16; // 60fps
   private intervalId: number | null = null;
-  private lastPoint: Point | null = null;
+  private _lastPoint: Point | null = null;
   private currentTool: { color: string; size: number } = {
     color: '#000000',
     size: 5,
@@ -47,7 +47,7 @@ class DrawingOptimizer {
     }
 
     this.eventQueue.push(event);
-    this.lastPoint = { x, y };
+    this._lastPoint = { x, y };
   }
 
   updateTool(color: string, size: number) {
@@ -56,19 +56,19 @@ class DrawingOptimizer {
     // If we're currently drawing, add the tool change to the next event
     if (this.isDrawing && this.eventQueue.length === 0) {
       // Force sending tool info on next event
-      this.lastPoint = null;
+      this._lastPoint = null;
     }
   }
 
   startDrawing() {
     this.isDrawing = true;
-    this.lastPoint = null;
+    this._lastPoint = null;
   }
 
   stopDrawing() {
     this.isDrawing = false;
     this.sendBatch(); // Send remaining events immediately
-    this.lastPoint = null;
+    this._lastPoint = null;
   }
 
   private sendBatch() {
@@ -123,7 +123,7 @@ class DrawingOptimizer {
 
   clear() {
     this.eventQueue = [];
-    this.lastPoint = null;
+    this._lastPoint = null;
   }
 }
 
