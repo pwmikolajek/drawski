@@ -1,12 +1,11 @@
 import { Socket } from 'socket.io-client';
-import type { DrawingEvent, Point } from '../types';
+import type { DrawingEvent } from '../types';
 
 class DrawingOptimizer {
   private socket: Socket | null = null;
   private eventQueue: DrawingEvent[] = [];
   private batchInterval: number = 16; // 60fps
   private intervalId: number | null = null;
-  private _lastPoint: Point | null = null;
   private currentTool: { color: string; size: number } = {
     color: '#000000',
     size: 5,
@@ -47,7 +46,6 @@ class DrawingOptimizer {
     }
 
     this.eventQueue.push(event);
-    this._lastPoint = { x, y };
   }
 
   updateTool(color: string, size: number) {
@@ -56,19 +54,16 @@ class DrawingOptimizer {
     // If we're currently drawing, add the tool change to the next event
     if (this.isDrawing && this.eventQueue.length === 0) {
       // Force sending tool info on next event
-      this._lastPoint = null;
     }
   }
 
   startDrawing() {
     this.isDrawing = true;
-    this._lastPoint = null;
   }
 
   stopDrawing() {
     this.isDrawing = false;
     this.sendBatch(); // Send remaining events immediately
-    this._lastPoint = null;
   }
 
   private sendBatch() {
@@ -123,7 +118,6 @@ class DrawingOptimizer {
 
   clear() {
     this.eventQueue = [];
-    this._lastPoint = null;
   }
 }
 
