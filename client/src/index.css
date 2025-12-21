@@ -87,8 +87,8 @@
     right: 0;
     bottom: 0;
     background-image:
-      linear-gradient(45deg, rgba(2, 132, 199, 0.15) 1px, transparent 1px),
-      linear-gradient(-45deg, rgba(2, 132, 199, 0.15) 1px, transparent 1px);
+      linear-gradient(45deg, rgba(2, 132, 199, 0.3) 1px, transparent 1px),
+      linear-gradient(-45deg, rgba(2, 132, 199, 0.3) 1px, transparent 1px);
     background-size: 20px 20px;
     animation: slide-background 60s linear infinite;
     pointer-events: none;
