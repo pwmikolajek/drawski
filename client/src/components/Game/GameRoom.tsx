@@ -285,12 +285,12 @@ export const GameRoom: React.FC<GameRoomProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 p-3">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-white rounded-lg shadow-md p-3 mb-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <img
                 src="/drawski-logo.png"
                 alt="Drawski"
@@ -310,7 +310,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               {/* Powerup Shop Button */}
               {gameState && gameState.status !== 'waiting' && gameState.status !== 'ended' && (
                 <button
@@ -333,7 +333,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
           {/* Left Sidebar - Leaderboard + Chat */}
           <div className="lg:col-span-1 flex flex-col gap-4 h-[calc(100vh-200px)]">
             {/* Leaderboard */}
@@ -402,12 +402,12 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                   </div>
                 </div>
               ) : gameState?.status === 'drawing' ? (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {/* Game Status Bar */}
-                  <div className="bg-gradient-to-r from-primary-50 to-primary-100 p-4 rounded-lg shadow-sm">
-                    <div className="flex items-center justify-between gap-4">
+                  <div className="bg-gradient-to-r from-primary-50 to-primary-100 p-3 rounded-lg shadow-sm">
+                    <div className="flex items-center justify-between gap-3">
                       {/* Round Info */}
-                      <div className="text-lg font-bold text-gray-800 whitespace-nowrap">
+                      <div className="text-base font-bold text-gray-800 whitespace-nowrap">
                         Round {roundInfo?.round} / {roundInfo?.maxRounds}
                       </div>
 
@@ -468,23 +468,23 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                   </div>
 
                   {/* Drawing Canvas */}
-                  <div className="bg-white rounded-lg shadow-md p-4">
+                  <div className="bg-white rounded-lg shadow-md p-3">
                     <div className="flex justify-center">
                       <div className="border-2 border-gray-200 rounded-lg overflow-hidden max-w-full shadow-lg">
                         <DrawingCanvas
                           isDrawer={isDrawer}
-                          width={900}
-                          height={600}
+                          width={800}
+                          height={533}
                         />
                       </div>
                     </div>
                     {!isDrawer && (
-                      <div className="text-center text-sm text-gray-600 mt-3">
+                      <div className="text-center text-sm text-gray-600 mt-2">
                         💬 Type your guess in the chat on the right!
                       </div>
                     )}
                     {isDrawer && (
-                      <div className="text-center text-sm text-gray-600 mt-3">
+                      <div className="text-center text-sm text-gray-600 mt-2">
                         🎨 Draw the word for others to guess!
                       </div>
                     )}

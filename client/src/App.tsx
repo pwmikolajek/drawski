@@ -144,7 +144,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center p-4">
+    <div className="min-h-screen animated-grid-bg flex items-center justify-center p-4">
       {/* Music Toggle Button */}
       <button
         onClick={handleMusicToggle}

@@ -5,36 +5,7 @@
 @layer base {
   body {
     @apply bg-gray-50 text-gray-900 antialiased;
-    position: relative;
     overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background-color: #f0f9ff;
-    opacity: 0.3;
-    background-image:
-      linear-gradient(#0284c7 1px, transparent 1px),
-      linear-gradient(to right, #0284c7 1px, #f0f9ff 1px);
-    background-size: 20px 20px;
-    transform: rotate(45deg);
-    animation: slide-background 60s linear infinite;
-    z-index: -1;
-    pointer-events: none;
-  }
-
-  @keyframes slide-background {
-    from {
-      transform: rotate(45deg) translateX(0);
-    }
-    to {
-      transform: rotate(45deg) translateX(-20px);
-    }
   }
 }
 
@@ -85,6 +56,15 @@
     }
   }
 
+  @keyframes slide-background {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 28.28px 28.28px;
+    }
+  }
+
   .animate-bounce-in {
     animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
@@ -92,5 +72,25 @@
   .animate-slide-in {
     animation: slide-in 0.3s ease-out forwards;
     opacity: 0;
+  }
+
+  .animated-grid-bg {
+    position: relative;
+    background: linear-gradient(to bottom right, #f0f9ff, #e0f2fe);
+  }
+
+  .animated-grid-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      linear-gradient(45deg, rgba(2, 132, 199, 0.1) 1px, transparent 1px),
+      linear-gradient(-45deg, rgba(2, 132, 199, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: slide-background 60s linear infinite;
+    pointer-events: none;
   }
 }
