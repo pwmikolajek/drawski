@@ -416,15 +416,15 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                   <div className="bg-gradient-to-r from-primary-50 to-primary-100 p-3 rounded-lg shadow-sm">
                     <div className="flex items-center justify-between gap-3">
                       {/* Round Info */}
-                      <div className="text-base font-bold text-gray-800 whitespace-nowrap">
+                      <div className="text-base font-bold text-gray-800 whitespace-nowrap flex-shrink-0">
                         Round {roundInfo?.round} / {roundInfo?.maxRounds}
                       </div>
 
                       {/* Word Display */}
-                      <div className="flex-1 flex items-center justify-center">
+                      <div className="flex-1 flex items-center justify-center min-w-0">
                         {isDrawer ? (
                           currentWord ? (
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 flex-wrap justify-center">
                               <div className="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg font-bold text-lg shadow-sm">
                                 Your word: <span className="text-yellow-900">{currentWord}</span>
                               </div>
@@ -446,13 +446,13 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                             </div>
                           )
                         ) : displayWord ? (
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 flex-wrap justify-center">
                             <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-gray-700">Guess the word:</span>
+                              <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Guess the word:</span>
                               <WordDisplay word={displayWord} />
                             </div>
                             {currentWordDifficulty && (
-                              <div className={`px-3 py-1 rounded-lg text-sm font-semibold shadow-sm ${
+                              <div className={`px-3 py-1 rounded-lg text-sm font-semibold shadow-sm flex-shrink-0 ${
                                 currentWordDifficulty === 'easy' ? 'bg-green-100 text-green-800' :
                                 currentWordDifficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' :
                                 'bg-red-100 text-red-800'
@@ -468,10 +468,12 @@ export const GameRoom: React.FC<GameRoomProps> = ({
 
                       {/* Timer */}
                       {gameState.roundStartTime && (
-                        <Timer
-                          startTime={gameState.roundStartTime}
-                          duration={80000}
-                        />
+                        <div className="flex-shrink-0">
+                          <Timer
+                            startTime={gameState.roundStartTime}
+                            duration={80000}
+                          />
+                        </div>
                       )}
                     </div>
                   </div>
