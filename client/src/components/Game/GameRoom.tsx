@@ -446,33 +446,28 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                             </div>
                           )
                         ) : displayWord ? (
-                          <div className="flex items-center gap-3 flex-wrap justify-center">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Guess the word:</span>
-                              <WordDisplay word={displayWord} />
-                            </div>
-                            {currentWordDifficulty && (
-                              <div className={`px-3 py-1 rounded-lg text-sm font-semibold shadow-sm flex-shrink-0 ${
-                                currentWordDifficulty === 'easy' ? 'bg-green-100 text-green-800' :
-                                currentWordDifficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-red-100 text-red-800'
-                              }`}>
-                                {currentWordDifficulty === 'easy' ? '🟢 1.0x' :
-                                 currentWordDifficulty === 'medium' ? '🟡 1.5x' :
-                                 '🔴 2.0x'}
-                              </div>
-                            )}
-                          </div>
+                          <WordDisplay word={displayWord} />
                         ) : null}
                       </div>
 
-                      {/* Timer */}
+                      {/* Timer with Difficulty */}
                       {gameState.roundStartTime && (
-                        <div className="flex-shrink-0">
+                        <div className="flex-shrink-0 flex flex-col items-end gap-1">
                           <Timer
                             startTime={gameState.roundStartTime}
                             duration={80000}
                           />
+                          {!isDrawer && currentWordDifficulty && (
+                            <div className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                              currentWordDifficulty === 'easy' ? 'bg-green-100 text-green-700' :
+                              currentWordDifficulty === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                              'bg-red-100 text-red-700'
+                            }`}>
+                              {currentWordDifficulty === 'easy' ? '🟢 1.0x' :
+                               currentWordDifficulty === 'medium' ? '🟡 1.5x' :
+                               '🔴 2.0x'}
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
