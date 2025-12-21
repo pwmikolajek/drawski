@@ -415,30 +415,37 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                   {/* Game Status Bar */}
                   <div className="bg-gradient-to-r from-primary-50 to-primary-100 p-3 rounded-lg shadow-sm">
                     <div className="flex items-center justify-between gap-3">
-                      {/* Round Info */}
-                      <div className="text-base font-bold text-gray-800 whitespace-nowrap flex-shrink-0">
-                        Round {roundInfo?.round} / {roundInfo?.maxRounds}
+                      {/* Round Info with Multiplier */}
+                      <div className="flex-shrink-0">
+                        <div className="text-base font-bold text-gray-800 whitespace-nowrap">
+                          Round {roundInfo?.round} / {roundInfo?.maxRounds}
+                        </div>
+                        {currentWordDifficulty && (
+                          <div className={`mt-1.5 inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold ${
+                            currentWordDifficulty === 'easy'
+                              ? 'bg-green-50 text-green-700 shadow-sm shadow-green-200 animate-pulse-soft' :
+                            currentWordDifficulty === 'medium'
+                              ? 'bg-yellow-50 text-yellow-700 shadow-sm shadow-yellow-200 animate-pulse-soft' :
+                              'bg-red-50 text-red-700 shadow-sm shadow-red-200 animate-pulse-soft'
+                          }`}>
+                            <span className="mr-1">
+                              {currentWordDifficulty === 'easy' ? '🟢' :
+                               currentWordDifficulty === 'medium' ? '🟡' :
+                               '🔴'}
+                            </span>
+                            {currentWordDifficulty === 'easy' ? '1.0x' :
+                             currentWordDifficulty === 'medium' ? '1.5x' :
+                             '2.0x'} Points
+                          </div>
+                        )}
                       </div>
 
                       {/* Word Display */}
                       <div className="flex-1 flex items-center justify-center min-w-0">
                         {isDrawer ? (
                           currentWord ? (
-                            <div className="flex items-center gap-3 flex-wrap justify-center">
-                              <div className="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg font-bold text-lg shadow-sm">
-                                Your word: <span className="text-yellow-900">{currentWord}</span>
-                              </div>
-                              {currentWordDifficulty && (
-                                <div className={`px-3 py-1 rounded-lg text-sm font-semibold shadow-sm ${
-                                  currentWordDifficulty === 'easy' ? 'bg-green-100 text-green-800' :
-                                  currentWordDifficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-red-100 text-red-800'
-                                }`}>
-                                  {currentWordDifficulty === 'easy' ? '🟢 Easy 1.0x' :
-                                   currentWordDifficulty === 'medium' ? '🟡 Medium 1.5x' :
-                                   '🔴 Hard 2.0x'}
-                                </div>
-                              )}
+                            <div className="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg font-bold text-lg shadow-sm">
+                              Your word: <span className="text-yellow-900">{currentWord}</span>
                             </div>
                           ) : (
                             <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-bold text-lg shadow-sm">
@@ -450,24 +457,13 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                         ) : null}
                       </div>
 
-                      {/* Timer with Difficulty */}
+                      {/* Timer */}
                       {gameState.roundStartTime && (
-                        <div className="flex-shrink-0 flex flex-col items-end gap-1">
+                        <div className="flex-shrink-0">
                           <Timer
                             startTime={gameState.roundStartTime}
                             duration={80000}
                           />
-                          {!isDrawer && currentWordDifficulty && (
-                            <div className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                              currentWordDifficulty === 'easy' ? 'bg-green-100 text-green-700' :
-                              currentWordDifficulty === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                              'bg-red-100 text-red-700'
-                            }`}>
-                              {currentWordDifficulty === 'easy' ? '🟢 1.0x' :
-                               currentWordDifficulty === 'medium' ? '🟡 1.5x' :
-                               '🔴 2.0x'}
-                            </div>
-                          )}
                         </div>
                       )}
                     </div>
