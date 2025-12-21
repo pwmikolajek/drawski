@@ -20,7 +20,7 @@ export const PowerupShop: React.FC<PowerupShopProps> = ({
   onPurchase,
   onClose,
 }) => {
-  const socket = useSocket();
+  const { socket } = useSocket();
   const powerups = Object.values(POWERUP_CONFIG);
 
   // State for dynamic pricing

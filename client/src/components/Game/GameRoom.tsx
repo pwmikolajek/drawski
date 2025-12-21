@@ -67,6 +67,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
   const currentPlayer = players.find(p => p.socketId === socket?.id);
   const playerPowerups: PowerupInventory = currentPlayer?.powerups || {};
   const activeEffects: ActiveEffect[] = currentPlayer?.activeEffects || [];
+  const playerCooldowns = currentPlayer?.cooldowns || {};
   const playerScore = currentPlayer?.score || 0;
 
   useEffect(() => {
@@ -275,15 +276,15 @@ export const GameRoom: React.FC<GameRoomProps> = ({
     toast.success('Room code copied!');
   };
 
-  const handlePurchasePowerup = (powerupId: string) => {
+  const handlePurchasePowerup = (powerupId: string, targetSocketId?: string) => {
     if (socket) {
-      socket.emit('powerup:purchase', { powerupId });
+      socket.emit('powerup:purchase', { powerupId, targetSocketId });
     }
   };
 
-  const handleActivatePowerup = (powerupId: string) => {
+  const handleActivatePowerup = (powerupId: string, targetSocketId?: string) => {
     if (socket) {
-      socket.emit('powerup:activate', { powerupId });
+      socket.emit('powerup:activate', { powerupId, targetSocketId });
     }
   };
 
@@ -544,10 +545,12 @@ export const GameRoom: React.FC<GameRoomProps> = ({
         )}
 
         {/* Powerup Shop Modal */}
-        {showShop && (
+        {showShop && socket && (
           <PowerupShop
             playerScore={playerScore}
             playerPowerups={playerPowerups}
+            players={players}
+            currentSocketId={socket.id || ''}
             onPurchase={handlePurchasePowerup}
             onClose={() => setShowShop(false)}
           />
@@ -558,6 +561,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
           <PowerupBar
             playerPowerups={playerPowerups}
             activeEffects={activeEffects}
+            cooldowns={playerCooldowns}
             onActivate={handleActivatePowerup}
             isDrawer={isDrawer}
           />
