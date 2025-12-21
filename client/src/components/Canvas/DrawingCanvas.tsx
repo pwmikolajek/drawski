@@ -187,53 +187,57 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       />
 
       {isDrawer && (
-        <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded p-3 space-y-2">
-          {/* Color palette */}
-          <div className="flex gap-2">
-            {[
-              '#000000', // Black
-              '#FFFFFF', // White
-              '#FF0000', // Red
-              '#0000FF', // Blue
-              '#00FF00', // Green
-              '#FFFF00', // Yellow
-              '#FF6B00', // Orange
-              '#800080', // Purple
-              '#FFC0CB', // Pink
-              '#8B4513', // Brown
-            ].map((c) => (
-              <button
-                key={c}
-                onClick={() => setColor(c)}
-                className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${
-                  color === c ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'
-                }`}
-                style={{ backgroundColor: c }}
-                title={c}
+        <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded p-3">
+          <div className="flex items-center gap-4">
+            {/* Color palette */}
+            <div className="flex gap-2">
+              {[
+                '#000000', // Black
+                '#FFFFFF', // White
+                '#FF0000', // Red
+                '#0000FF', // Blue
+                '#00FF00', // Green
+                '#FFFF00', // Yellow
+                '#FF6B00', // Orange
+                '#800080', // Purple
+                '#FFC0CB', // Pink
+                '#8B4513', // Brown
+              ].map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setColor(c)}
+                  className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${
+                    color === c ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'
+                  }`}
+                  style={{ backgroundColor: c }}
+                  title={c}
+                />
+              ))}
+              {/* Custom color picker */}
+              <input
+                type="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                className="w-8 h-8 rounded-full cursor-pointer border-2 border-gray-300"
+                title="Custom color"
               />
-            ))}
-            {/* Custom color picker */}
-            <input
-              type="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              className="w-8 h-8 rounded-full cursor-pointer border-2 border-gray-300"
-              title="Custom color"
-            />
-          </div>
+            </div>
 
-          {/* Size slider and Clear button */}
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-gray-700">Size:</span>
-            <input
-              type="range"
-              min="1"
-              max="50"
-              value={size}
-              onChange={(e) => setSize(Number(e.target.value))}
-              className="flex-1"
-            />
-            <span className="text-sm text-gray-600 w-8">{size}</span>
+            {/* Size slider */}
+            <div className="flex items-center gap-2 flex-1">
+              <span className="text-sm font-medium text-gray-700">Size:</span>
+              <input
+                type="range"
+                min="1"
+                max="50"
+                value={size}
+                onChange={(e) => setSize(Number(e.target.value))}
+                className="flex-1"
+              />
+              <span className="text-sm text-gray-600 w-8">{size}</span>
+            </div>
+
+            {/* Clear button */}
             <button
               onClick={clearCanvas}
               className="btn-secondary text-sm"
