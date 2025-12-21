@@ -222,29 +222,27 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
             />
           </div>
 
-          {/* Size slider and Clear button */}
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2 flex-1">
-              <span className="text-sm font-medium text-gray-700">Size:</span>
-              <input
-                type="range"
-                min="1"
-                max="50"
-                value={size}
-                onChange={(e) => setSize(Number(e.target.value))}
-                className="flex-1"
-              />
-              <span className="text-sm text-gray-600 w-8">{size}</span>
-            </div>
-
-            {/* Clear button */}
-            <button
-              onClick={clearCanvas}
-              className="btn-secondary text-sm"
-            >
-              Clear
-            </button>
+          {/* Size slider */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-gray-700">Size:</span>
+            <input
+              type="range"
+              min="1"
+              max="50"
+              value={size}
+              onChange={(e) => setSize(Number(e.target.value))}
+              className="flex-1"
+            />
+            <span className="text-sm text-gray-600 w-8">{size}</span>
           </div>
+
+          {/* Clear button */}
+          <button
+            onClick={clearCanvas}
+            className="btn-secondary text-sm w-full"
+          >
+            Clear
+          </button>
         </div>
       )}
     </div>
