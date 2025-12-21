@@ -59,7 +59,7 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({ selectedAvatar, 
         )}
 
         {/* Avatar Grid */}
-        <div className="overflow-visible px-1 py-2">
+        <div className="overflow-visible px-10 py-2">
           <div
             className="grid grid-cols-4 gap-3 transition-all duration-300 ease-in-out"
             style={{
