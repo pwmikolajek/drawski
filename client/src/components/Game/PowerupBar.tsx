@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { POWERUP_CONFIG } from '../../../../shared/constants';
-import type { PowerupInventory, ActiveEffect } from '../../types';
+import type { PowerupInventory, ActiveEffect, PlayerCooldowns } from '../../types';
 
 interface PowerupBarProps {
   playerPowerups: PowerupInventory;
   activeEffects: ActiveEffect[];
+  cooldowns: PlayerCooldowns;
   onActivate: (powerupId: string) => void;
   isDrawer: boolean;
 }
@@ -12,10 +13,35 @@ interface PowerupBarProps {
 export const PowerupBar: React.FC<PowerupBarProps> = ({
   playerPowerups,
   activeEffects,
+  cooldowns,
   onActivate,
   isDrawer,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [now, setNow] = useState(Date.now());
+
+  // Update current time every second for cooldown display
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(Date.now());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Calculate remaining cooldown time
+  const getCooldownRemaining = (powerupId: string): number => {
+    const cooldown = cooldowns[powerupId];
+    if (!cooldown) return 0;
+
+    const remaining = Math.max(0, cooldown.canUseAgainAt - now);
+    return Math.ceil(remaining / 1000); // Convert to seconds
+  };
+
+  // Check if powerup is on cooldown
+  const isOnCooldown = (powerupId: string): boolean => {
+    return getCooldownRemaining(powerupId) > 0;
+  };
 
   // Filter powerups based on whether player is drawer or guesser
   const availablePowerups = Object.entries(playerPowerups)
@@ -39,14 +65,19 @@ export const PowerupBar: React.FC<PowerupBarProps> = ({
       {/* Toggle Button */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:scale-110 transition-transform mb-3"
+        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:scale-110 transition-transform mb-3 relative"
       >
         <span className="text-2xl">{expanded ? '✕' : '⚡'}</span>
+        {availablePowerups.length > 0 && (
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            {availablePowerups.length}
+          </span>
+        )}
       </button>
 
       {/* Powerup Panel */}
       {expanded && (
-        <div className="bg-white rounded-xl shadow-2xl p-4 w-64 max-h-96 overflow-y-auto">
+        <div className="bg-white rounded-xl shadow-2xl p-4 w-72 max-h-96 overflow-y-auto">
           <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
             <span>⚡</span>
             <span>Your Powerups</span>
@@ -60,6 +91,8 @@ export const PowerupBar: React.FC<PowerupBarProps> = ({
                 const powerup = Object.values(POWERUP_CONFIG).find(p => p.id === effect.type);
                 if (!powerup) return null;
 
+                const remaining = effect.expiresAt ? Math.max(0, Math.ceil((effect.expiresAt - now) / 1000)) : null;
+
                 return (
                   <div
                     key={index}
@@ -69,7 +102,11 @@ export const PowerupBar: React.FC<PowerupBarProps> = ({
                       <span className="text-xl">{powerup.badge}</span>
                       <div className="flex-1">
                         <p className="text-sm font-semibold text-green-800">{powerup.name}</p>
-                        <p className="text-xs text-green-600">Active!</p>
+                        {remaining !== null && remaining > 0 ? (
+                          <p className="text-xs text-green-600">{remaining}s remaining</p>
+                        ) : (
+                          <p className="text-xs text-green-600">Active!</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -86,11 +123,17 @@ export const PowerupBar: React.FC<PowerupBarProps> = ({
                 if (!powerup) return null;
 
                 const isActive = activeEffects.some(e => e.type === powerupId);
+                const cooldownSeconds = getCooldownRemaining(powerupId);
+                const onCooldown = isOnCooldown(powerupId);
 
                 return (
                   <div
                     key={powerupId}
-                    className="border-2 border-gray-200 rounded-lg p-3 hover:border-purple-300 transition-colors"
+                    className={`border-2 rounded-lg p-3 transition-colors ${
+                      onCooldown || isActive
+                        ? 'border-gray-200 opacity-60'
+                        : 'border-gray-200 hover:border-purple-300'
+                    }`}
                   >
                     <div className="flex items-start gap-2 mb-2">
                       <span className="text-2xl">{powerup.badge}</span>
@@ -101,20 +144,25 @@ export const PowerupBar: React.FC<PowerupBarProps> = ({
                             ×{count}
                           </span>
                         </div>
-                        <p className="text-xs text-gray-600">{powerup.description}</p>
+                        <p className="text-xs text-gray-600 line-clamp-2">{powerup.description}</p>
+                        {onCooldown && (
+                          <p className="text-xs text-orange-600 font-semibold mt-1">
+                            ⏱️ {cooldownSeconds}s cooldown
+                          </p>
+                        )}
                       </div>
                     </div>
 
                     <button
                       onClick={() => onActivate(powerupId)}
-                      disabled={isActive}
+                      disabled={isActive || onCooldown}
                       className={`w-full py-1.5 rounded-lg text-sm font-semibold transition-colors ${
-                        isActive
+                        isActive || onCooldown
                           ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                           : 'bg-purple-600 hover:bg-purple-700 text-white'
                       }`}
                     >
-                      {isActive ? 'Already Active' : 'Activate'}
+                      {isActive ? 'Already Active' : onCooldown ? `Cooldown: ${cooldownSeconds}s` : 'Activate'}
                     </button>
                   </div>
                 );
