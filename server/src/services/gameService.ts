@@ -70,10 +70,19 @@ class GameService {
       player.totalCorrectGuesses = 0;
       player.powerups = {};
       player.activeEffects = [];
+      player.cooldowns = {};
     });
 
-    // Clear drawing history
+    // Clear drawing history and snapshots
     room.drawingHistory = [];
+    room.drawingSnapshots = [];
+
+    // Reset global cooldowns
+    room.globalCooldowns = {};
+
+    // Reset powerup effect states
+    room.gameState.timePausedUntil = null;
+    room.gameState.brushSabotageActive = false;
 
     // Notify all players that game was restarted
     this.io.to(roomCode).emit(GAME.RESTARTED, {
@@ -99,6 +108,15 @@ class GameService {
     room.players.forEach(player => {
       player.guessedCorrectly = false;
     });
+
+    // Reset per-round usage limits for powerups
+    Object.keys(room.globalCooldowns).forEach(powerupId => {
+      room.globalCooldowns[powerupId].usesThisRound = 0;
+    });
+
+    // Reset powerup effect states
+    room.gameState.timePausedUntil = null;
+    room.gameState.brushSabotageActive = false;
 
     // Select next drawer (round-robin)
     const players = Array.from(room.players.values());
@@ -183,6 +201,9 @@ class GameService {
     room.gameState.status = 'drawing';
     room.gameState.roundStartTime = Date.now();
     room.gameState.wordOptions = null;
+
+    // Start snapshot recording for Canvas Rewind powerup
+    powerupService.startSnapshotRecording(roomCode);
 
     // Clear canvas for new round
     this.io.to(roomCode).emit('drawing:clear');
@@ -333,20 +354,33 @@ class GameService {
       totalScore += streakBonus;
     }
 
-    // 4. Check for double points powerup
-    if (powerupService.hasActiveEffect(player, 'double_points')) {
-      const doubleBonus = totalScore; // Double the total score
-      totalScore += doubleBonus;
+    // 4. Check for triple points powerup (replaces double points)
+    if (powerupService.hasActiveEffect(player, 'triple_points')) {
+      const tripleBonus = totalScore * 2; // Triple the total score (add 2x more)
+      totalScore += tripleBonus;
       bonuses.push({
-        type: '2x Points Powerup',
-        amount: doubleBonus,
-        badge: '⭐',
+        type: '3x Points Powerup',
+        amount: tripleBonus,
+        badge: '💰',
       });
       // Consume the effect
-      powerupService.consumeEffect(player, 'double_points');
+      powerupService.consumeEffect(player, 'triple_points');
     }
 
-    // 5. Increment streak and stats
+    // 5. Check for speed curse (halve score)
+    if (powerupService.hasActiveEffect(player, 'speed_curse')) {
+      const cursePenalty = Math.floor(totalScore / 2);
+      totalScore -= cursePenalty;
+      bonuses.push({
+        type: 'Speed Curse',
+        amount: -cursePenalty,
+        badge: '⚡',
+      });
+      // Consume the effect
+      powerupService.consumeEffect(player, 'speed_curse');
+    }
+
+    // 6. Increment streak and stats
     player.currentStreak++;
     player.totalCorrectGuesses++;
     player.maxStreak = Math.max(player.maxStreak, player.currentStreak);
@@ -354,8 +388,19 @@ class GameService {
     // Award powerups for milestones
     if (player.currentStreak === 3) {
       powerupService.awardPowerup(roomCode, socketId, 'reveal_letter');
+    } else if (player.currentStreak === 5) {
+      powerupService.awardPowerup(roomCode, socketId, 'oracle_hint');
+    } else if (player.currentStreak === 7) {
+      powerupService.awardPowerup(roomCode, socketId, 'triple_points');
+    }
+
+    // Total guesses milestones
+    if (player.totalCorrectGuesses === 5) {
+      powerupService.awardPowerup(roomCode, socketId, 'sketch_vision');
     } else if (player.totalCorrectGuesses === 10) {
-      powerupService.awardPowerup(roomCode, socketId, 'double_points');
+      powerupService.awardPowerup(roomCode, socketId, 'time_warp');
+    } else if (player.totalCorrectGuesses === 15) {
+      powerupService.awardPowerup(roomCode, socketId, 'canvas_rewind');
     }
 
     // Add total score to player
