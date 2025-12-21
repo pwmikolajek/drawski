@@ -1,9 +1,9 @@
 export type PowerupId =
   | 'reveal_letter' | 'extra_time' | 'streak_shield'
-  | 'time_warp' | 'sketch_vision' | 'triple_points'
+  | 'time_warp' | 'triple_points'
   | 'blind_spot' | 'point_steal' | 'canvas_chaos'
   | 'brush_sabotage' | 'speed_curse'
-  | 'oracle_hint' | 'canvas_rewind';
+  | 'oracle_hint';
 
 export interface PowerupInventory {
   [key: string]: number; // powerupId -> count

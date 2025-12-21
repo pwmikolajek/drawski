@@ -163,61 +163,6 @@ class PowerupService {
     return { valid: true };
   }
 
-  // Snapshot recording for Canvas Rewind
-  startSnapshotRecording(roomCode: string): NodeJS.Timeout | null {
-    const room = roomService.getRoom(roomCode);
-    if (!room) return null;
-
-    // Clear any existing snapshots from previous round
-    room.drawingSnapshots = [];
-
-    // Record snapshot every 10 seconds
-    const interval = setInterval(() => {
-      const roomCheck = roomService.getRoom(roomCode);
-      if (!roomCheck || roomCheck.gameState.status !== 'drawing') {
-        clearInterval(interval);
-        return;
-      }
-
-      // Save current drawing history as a snapshot
-      roomCheck.drawingSnapshots.push({
-        timestamp: Date.now(),
-        events: [...roomCheck.drawingHistory],
-      });
-
-      // Keep only last 8 snapshots (80 seconds)
-      if (roomCheck.drawingSnapshots.length > 8) {
-        roomCheck.drawingSnapshots.shift();
-      }
-    }, 10000); // Every 10 seconds
-
-    return interval;
-  }
-
-  // Get snapshot from X seconds ago (for Canvas Rewind)
-  getSnapshotFromSecondsAgo(roomCode: string, seconds: number): any[] {
-    const room = roomService.getRoom(roomCode);
-    if (!room || room.drawingSnapshots.length === 0) {
-      return [];
-    }
-
-    const targetTime = Date.now() - (seconds * 1000);
-
-    // Find closest snapshot to target time
-    let closestSnapshot = room.drawingSnapshots[0];
-    let minDiff = Math.abs(closestSnapshot.timestamp - targetTime);
-
-    for (const snapshot of room.drawingSnapshots) {
-      const diff = Math.abs(snapshot.timestamp - targetTime);
-      if (diff < minDiff) {
-        minDiff = diff;
-        closestSnapshot = snapshot;
-      }
-    }
-
-    return closestSnapshot.events;
-  }
-
   // Update cooldowns after powerup use
   private updateCooldowns(roomCode: string, socketId: string, powerupId: PowerupId): void {
     const room = roomService.getRoom(roomCode);
@@ -344,9 +289,6 @@ class PowerupService {
       case 'time_warp':
         success = this.activateTimeWarp(roomCode, socketId);
         break;
-      case 'sketch_vision':
-        success = this.activateSketchVision(roomCode, socketId);
-        break;
       case 'triple_points':
         success = this.activateTriplePoints(roomCode, socketId);
         break;
@@ -371,9 +313,6 @@ class PowerupService {
       // NEW TACTICAL POWERUPS (2)
       case 'oracle_hint':
         success = this.activateOracleHint(roomCode, socketId);
-        break;
-      case 'canvas_rewind':
-        success = this.activateCanvasRewind(roomCode, socketId);
         break;
 
       default:
@@ -495,20 +434,6 @@ class PowerupService {
         this.io?.to(roomCode).emit('powerup:time_warp:ended');
       }
     }, 15000);
-
-    return true;
-  }
-
-  // Sketch Vision: Send drawing history to player for 20 seconds
-  private activateSketchVision(roomCode: string, socketId: string): boolean {
-    const room = roomService.getRoom(roomCode);
-    if (!room || !this.io) return false;
-
-    // Send current drawing history to the player
-    this.io.to(socketId).emit('powerup:sketch_vision:granted', {
-      drawingHistory: room.drawingHistory,
-      duration: 20000,
-    });
 
     return true;
   }
@@ -686,31 +611,6 @@ class PowerupService {
       category,
       firstLetter,
       message: `Category: ${category} | First letter: ${firstLetter}`,
-    });
-
-    return true;
-  }
-
-  // Canvas Rewind: Restore canvas to 20 seconds ago
-  private activateCanvasRewind(roomCode: string, socketId: string): boolean {
-    const room = roomService.getRoom(roomCode);
-    if (!room || !this.io) return false;
-
-    // Check if player is the drawer
-    if (room.gameState.currentDrawer !== socketId) {
-      logger.warn(`Player ${socketId} tried to use canvas rewind but is not the drawer`);
-      return false;
-    }
-
-    // Get snapshot from 20 seconds ago
-    const snapshotEvents = this.getSnapshotFromSecondsAgo(roomCode, 20);
-
-    // Replace current drawing history with snapshot
-    room.drawingHistory = [...snapshotEvents];
-
-    // Broadcast rewind to all players
-    this.io.to(roomCode).emit('powerup:canvas_rewind:activated', {
-      events: snapshotEvents,
     });
 
     return true;

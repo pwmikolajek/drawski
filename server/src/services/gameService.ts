@@ -202,9 +202,6 @@ class GameService {
     room.gameState.roundStartTime = Date.now();
     room.gameState.wordOptions = null;
 
-    // Start snapshot recording for Canvas Rewind powerup
-    powerupService.startSnapshotRecording(roomCode);
-
     // Clear canvas for new round
     this.io.to(roomCode).emit('drawing:clear');
 
@@ -395,12 +392,8 @@ class GameService {
     }
 
     // Total guesses milestones
-    if (player.totalCorrectGuesses === 5) {
-      powerupService.awardPowerup(roomCode, socketId, 'sketch_vision');
-    } else if (player.totalCorrectGuesses === 10) {
+    if (player.totalCorrectGuesses === 10) {
       powerupService.awardPowerup(roomCode, socketId, 'time_warp');
-    } else if (player.totalCorrectGuesses === 15) {
-      powerupService.awardPowerup(roomCode, socketId, 'canvas_rewind');
     }
 
     // Add total score to player
