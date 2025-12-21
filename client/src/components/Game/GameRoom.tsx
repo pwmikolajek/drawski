@@ -10,6 +10,7 @@ import { Chat } from './Chat';
 import { BonusNotification } from './BonusNotification';
 import { PowerupShop } from './PowerupShop';
 import { PowerupBar } from './PowerupBar';
+import { GameSettings } from './GameSettings';
 import toast from 'react-hot-toast';
 
 interface GameRoomProps {
@@ -18,6 +19,11 @@ interface GameRoomProps {
   onLeaveRoom: () => void;
   initialPlayers?: Player[];
   initialGameState?: GameState | null;
+}
+
+interface GameConfig {
+  rounds: number;
+  roundDuration: number;
 }
 
 export const GameRoom: React.FC<GameRoomProps> = ({
@@ -53,6 +59,9 @@ export const GameRoom: React.FC<GameRoomProps> = ({
 
   // Powerup state
   const [showShop, setShowShop] = useState(false);
+
+  // Game settings state
+  const [showGameSettings, setShowGameSettings] = useState(false);
 
   // Get current player's powerups and active effects
   const currentPlayer = players.find(p => p.socketId === socket?.id);
@@ -254,11 +263,11 @@ export const GameRoom: React.FC<GameRoomProps> = ({
     onLeaveRoom();
   };
 
-  const handleStartGame = () => {
+  const handleStartGame = (config: GameConfig) => {
     if (socket) {
-      // Removed 2-player requirement for testing
-      socket.emit('game:start');
+      socket.emit('game:start', config);
     }
+    setShowGameSettings(false);
   };
 
   const copyRoomCode = () => {
@@ -348,7 +357,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
               {/* Start Game Button (Host Only) */}
               {isHost && (!gameState || gameState?.status === 'waiting') && (
                 <button
-                  onClick={handleStartGame}
+                  onClick={() => setShowGameSettings(true)}
                   className="btn-primary w-full mt-4"
                 >
                   Start Game
@@ -563,6 +572,14 @@ export const GameRoom: React.FC<GameRoomProps> = ({
             activeEffects={activeEffects}
             onActivate={handleActivatePowerup}
             isDrawer={isDrawer}
+          />
+        )}
+
+        {/* Game Settings Modal */}
+        {showGameSettings && (
+          <GameSettings
+            onStartGame={handleStartGame}
+            onCancel={() => setShowGameSettings(false)}
           />
         )}
       </div>

@@ -16,12 +16,18 @@ class GameService {
   }
 
   // Start a new game
-  startGame(roomCode: string) {
+  startGame(
+    roomCode: string,
+    rounds: number = GAME_CONFIG.ROUNDS_PER_GAME,
+    roundDuration: number = GAME_CONFIG.ROUND_DURATION
+  ) {
     const room = roomService.getRoom(roomCode);
     if (!room || !this.io) return;
 
-    // Reset game state
+    // Reset game state with custom configuration
     room.gameState.round = 1;
+    room.gameState.maxRounds = rounds;
+    room.gameState.roundDuration = roundDuration;
     room.gameState.status = 'choosing';
 
     // Reset all player scores and states
@@ -33,7 +39,7 @@ class GameService {
     // Start first round
     this.startRound(roomCode);
 
-    logger.info(`Game started in room ${roomCode}`);
+    logger.info(`Game started in room ${roomCode} with ${rounds} rounds and ${roundDuration}ms duration`);
   }
 
   // Restart the game (full reset including streaks and powerups)
@@ -199,10 +205,10 @@ class GameService {
     // Start hint timers
     this.startHintTimers(roomCode);
 
-    // Start round timer
+    // Start round timer using configured duration
     const roundTimeout = setTimeout(() => {
       this.endRound(roomCode);
-    }, GAME_CONFIG.ROUND_DURATION);
+    }, room.gameState.roundDuration);
 
     this.roundTimers.set(roomCode + '_round', roundTimeout);
 
@@ -260,8 +266,8 @@ class GameService {
 
     // Calculate base score with time and difficulty multipliers
     const timeElapsed = guessTime - (room.gameState.roundStartTime || guessTime);
-    const timeRemaining = GAME_CONFIG.ROUND_DURATION - timeElapsed;
-    const timeRatio = Math.max(0, timeRemaining / GAME_CONFIG.ROUND_DURATION);
+    const timeRemaining = room.gameState.roundDuration - timeElapsed;
+    const timeRatio = Math.max(0, timeRemaining / room.gameState.roundDuration);
 
     const baseScore = Math.round(
       GAME_CONFIG.MIN_SCORE + (GAME_CONFIG.MAX_SCORE - GAME_CONFIG.MIN_SCORE) * timeRatio

@@ -102,7 +102,7 @@ export function setupRoomEvents(io: Server, socket: Socket) {
   });
 
   // Start game (host only)
-  socket.on(GAME.START, () => {
+  socket.on(GAME.START, (config?: { rounds?: number; roundDuration?: number }) => {
     try {
       const room = roomService.getRoomBySocket(socket.id);
 
@@ -123,10 +123,26 @@ export function setupRoomEvents(io: Server, socket: Socket) {
       //   return;
       // }
 
-      // Start the game using game service
-      gameService.startGame(room.roomCode);
+      // Validate and apply config
+      const rounds = config?.rounds ?? GAME_CONFIG.ROUNDS_PER_GAME;
+      const roundDuration = config?.roundDuration ?? GAME_CONFIG.ROUND_DURATION;
 
-      logger.info(`Game started in room ${room.roomCode}`);
+      // Validate bounds
+      if (rounds < 1 || rounds > 10) {
+        socket.emit(ROOM.ERROR, { message: 'Rounds must be between 1 and 10' });
+        return;
+      }
+
+      const allowedDurations = [30000, 60000, 80000, 120000];
+      if (!allowedDurations.includes(roundDuration)) {
+        socket.emit(ROOM.ERROR, { message: 'Invalid round duration' });
+        return;
+      }
+
+      // Start the game using game service with config
+      gameService.startGame(room.roomCode, rounds, roundDuration);
+
+      logger.info(`Game started in room ${room.roomCode} with ${rounds} rounds and ${roundDuration}ms duration`);
     } catch (error) {
       logger.error('Error starting game:', error);
       socket.emit(ROOM.ERROR, { message: 'Failed to start game' });
