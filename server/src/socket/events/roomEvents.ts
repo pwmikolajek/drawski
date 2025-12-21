@@ -3,18 +3,19 @@ import { roomService } from '../../services/roomService';
 import { gameService } from '../../services/gameService';
 import { logger } from '../../utils/logger';
 import { ROOM, GAME } from '../../../../shared/eventNames';
+import { GAME_CONFIG } from '../../../../shared/constants';
 import { Player } from '../../models/Player';
 
 export function setupRoomEvents(io: Server, socket: Socket) {
   // Create a new room
-  socket.on(ROOM.CREATE, ({ playerName }: { playerName: string }) => {
+  socket.on(ROOM.CREATE, ({ playerName, avatar }: { playerName: string; avatar?: number }) => {
     try {
       if (!playerName || playerName.trim().length === 0) {
         socket.emit(ROOM.ERROR, { message: 'Player name is required' });
         return;
       }
 
-      const room = roomService.createRoom(socket.id, playerName.trim());
+      const room = roomService.createRoom(socket.id, playerName.trim(), avatar || 1);
 
       // Join the socket to the room
       socket.join(room.roomCode);
@@ -34,14 +35,14 @@ export function setupRoomEvents(io: Server, socket: Socket) {
   });
 
   // Join an existing room
-  socket.on(ROOM.JOIN, ({ roomCode, playerName }: { roomCode: string; playerName: string }) => {
+  socket.on(ROOM.JOIN, ({ roomCode, playerName, avatar }: { roomCode: string; playerName: string; avatar?: number }) => {
     try {
       if (!roomCode || !playerName || playerName.trim().length === 0) {
         socket.emit(ROOM.ERROR, { message: 'Room code and player name are required' });
         return;
       }
 
-      const room = roomService.joinRoom(roomCode, socket.id, playerName.trim());
+      const room = roomService.joinRoom(roomCode, socket.id, playerName.trim(), avatar || 1);
 
       if (!room) {
         socket.emit(ROOM.ERROR, { message: 'Room not found, full, or game already started' });

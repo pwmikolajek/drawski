@@ -13,6 +13,7 @@ export interface ActiveEffect {
 export interface Player {
   socketId: string;
   name: string;
+  avatar: number;
   score: number;
   isReady: boolean;
   guessedCorrectly: boolean;

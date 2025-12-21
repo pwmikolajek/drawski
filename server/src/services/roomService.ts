@@ -14,12 +14,12 @@ class RoomService {
   }
 
   // Create a new room
-  createRoom(hostSocketId: string, hostName: string): Room {
+  createRoom(hostSocketId: string, hostName: string, avatar: number = 1): Room {
     const existingCodes = new Set(this.rooms.keys());
     const roomCode = generateUniqueRoomCode(existingCodes, ROOM_CONFIG.CODE_LENGTH);
 
     const room = createRoom(roomCode, hostSocketId);
-    const host = createPlayer(hostSocketId, hostName);
+    const host = createPlayer(hostSocketId, hostName, avatar);
     room.players.set(hostSocketId, host);
 
     this.rooms.set(roomCode, room);
@@ -30,7 +30,7 @@ class RoomService {
   }
 
   // Join an existing room
-  joinRoom(roomCode: string, socketId: string, playerName: string): Room | null {
+  joinRoom(roomCode: string, socketId: string, playerName: string, avatar: number = 1): Room | null {
     const room = this.rooms.get(roomCode.toUpperCase());
 
     if (!room) {
@@ -48,7 +48,7 @@ class RoomService {
       return null;
     }
 
-    const player = createPlayer(socketId, playerName);
+    const player = createPlayer(socketId, playerName, avatar);
     room.players.set(socketId, player);
     room.lastActivity = Date.now();
 

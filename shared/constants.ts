@@ -166,3 +166,9 @@ export const POWERUP_CONFIG = {
     usableBy: 'guesser' as const,
   },
 } as const;
+
+export const AVATAR_CONFIG = {
+  DEFAULT_AVATAR: 1,
+  AVAILABLE_AVATARS: [1, 2, 3, 4],
+  AVATAR_PATH: '/avatars/avatar-',
+} as const;

@@ -57,6 +57,7 @@ Room Model
 - `RoomService`: Room creation, joining, player management
 - `GameService`: Game flow, round management, timers, scoring
 - `WordService`: Word selection, hint revealing, display word generation
+- `PowerupService`: Powerup purchasing, activation, and effect management
 
 ### Client State Synchronization
 
@@ -64,6 +65,9 @@ The client uses React hooks and Context API (no Redux/Zustand):
 - `SocketContext`: Provides socket instance to entire component tree
 - `GameRoom`: Main game component managing players, gameState, and UI
 - `DrawingCanvas`: Canvas state (color, brush size, drawing context)
+- `PowerupBar`: Active powerups and effects display
+- `PowerupShop`: Powerup purchasing interface
+- `Chat`: Chat messages and guess submission
 
 State updates flow: Server event → Socket listener → setState → React re-render
 
@@ -72,11 +76,12 @@ State updates flow: Server event → Socket listener → setState → React re-r
 **Socket.IO Event Categories** (defined in `/shared/eventNames.ts`):
 
 1. **Room Events**: `room:create`, `room:join`, `room:leave`, `room:players:update`
-2. **Game Events**: `game:start`, `round:start:drawer`, `round:start:guesser`, `round:end`, `game:ended`
+2. **Game Events**: `game:start`, `round:start:drawer`, `round:start:guesser`, `round:end`, `game:ended`, `game:restart`
 3. **Drawing Events**: `drawing:batch`, `drawing:clear`
 4. **Word Events**: `word:select`, `word:selected`
 5. **Hint Events**: `hint:revealed`
-6. **Chat/Guess Events**: `chat:message`, `guess:correct` (partially implemented)
+6. **Chat/Guess Events**: `chat:message`, `chat:received`, `guess:correct`, `guess:close`
+7. **Powerup Events**: `powerup:purchase`, `powerup:activate`, `powerup:effect`, `powerup:awarded`
 
 **Socket.IO Rooms Strategy:**
 - `io.to(roomCode).emit(...)` → Broadcast to all players in room
@@ -88,27 +93,79 @@ State updates flow: Server event → Socket listener → setState → React re-r
 **1. Lobby Phase**
 - Host creates room → Server generates 4-character room code (A-Z, 0-9)
 - Players join using room code → Max 6 players per room
+- Host can configure game settings (rounds, round duration)
 - Host starts game when ready (min 2 players)
 
 **2. Round Start**
 - Server selects next drawer (round-robin rotation)
-- Drawer receives 3 word options from WordService
+- Drawer receives 3 word options from WordService (one per difficulty: Easy, Medium, Hard)
 - 15-second word selection timeout (auto-select if expired)
 - Drawer sees `round:start:drawer` event, guessers see `round:start:guesser` event
 
 **3. Drawing Phase**
 - Drawer selects word → Server creates masked display word: "_ _ _ _ _"
-- 80-second round timer starts
+- Round timer starts (configurable, default 80 seconds)
 - Hint timers reveal letters at 20s, 40s, 60s intervals
 - Drawer draws → Events batched and optimized → Broadcast to guessers
-- Guessers type guesses (chat system - scoring logic incomplete)
+- Guessers type guesses in chat → Server validates using Levenshtein distance
+- Close guesses (within edit distance) trigger `guess:close` event
+- Correct guesses award points and bonuses
 
 **4. Round End**
 - Timer expires or all guessers guess correctly
 - Word revealed to all players
-- Scores updated (if guess system implemented)
+- Scores and bonuses displayed
+- Drawer receives points if at least one player guessed correctly (Perfect Round bonus if all guessed)
 - If more rounds remain, next round starts after brief delay
 - If all rounds complete, game ends with final scores
+
+### Scoring System
+
+**Base Score Calculation:**
+- Points decrease linearly over time from MAX_SCORE (1000) to MIN_SCORE (500)
+- Word difficulty multiplier applied: Easy (1.0x), Medium (1.5x), Hard (2.0x)
+- Formula: `baseScore = maxScore - ((maxScore - minScore) * elapsedRatio) * difficultyMultiplier`
+
+**Speed Bonuses:**
+- Lightning (< 5s): +500 points ⚡
+- Quick (< 10s): +300 points 🔥
+- Fast (< 20s): +150 points 💨
+
+**Streak System:**
+- Consecutive correct guesses build streak
+- +100 points per streak level (capped at +500 for 5+ streak)
+- Streak resets if player fails to guess
+
+**Special Bonuses:**
+- First Blood: +200 points for first correct guess 🩸
+- Perfect Round: +300 for all guessers, +500 for drawer ✨
+
+**Drawer Score:**
+- Earns 50% of total points awarded to guessers
+- Perfect Round bonus if all players guess correctly
+
+### Powerup System
+
+Players can purchase and activate powerups using earned points:
+
+**Hint Powerups (Guessers):**
+- Reveal Letter (💡 300pts): Reveals one random hidden letter
+- Word Length (📏 150pts): Shows exact letter count
+- Category Hint (🏷️ 200pts): Reveals word category (Animal, Object, Place, Food, Nature)
+
+**Drawing Powerups (Drawer):**
+- Extra Time (⏰ 400pts): Adds 30 seconds to round timer
+- Undo (↩️ 100pts): Removes last drawing stroke
+
+**Universal Powerups:**
+- 2x Points (⭐ 500pts): Doubles points for next correct guess
+- Streak Shield (🛡️ 350pts): Protects streak for one round if player fails
+
+**Powerup Management:**
+- Purchased powerups stored in player inventory
+- Active effects tracked with expiration times (typically 2 minutes)
+- Effects automatically cleaned up when expired
+- Some effects consumed on use (2x Points, Streak Shield)
 
 ### Drawing Optimization System
 
@@ -133,7 +190,7 @@ Drawing events are:
 GameService maintains multiple timers per room:
 
 ```typescript
-roundTimers: Map<roomCode, NodeJS.Timeout>  # Word choice (15s) and round duration (80s)
+roundTimers: Map<roomCode, NodeJS.Timeout>  # Word choice (15s) and round duration (configurable)
 hintTimers: Map<roomCode, NodeJS.Timeout[]> # Hint reveal timers [20s, 40s, 60s]
 ```
 
@@ -145,16 +202,36 @@ All game parameters are in `/shared/constants.ts`:
 
 ```typescript
 GAME_CONFIG:
-├── ROUNDS_PER_GAME: 3
-├── ROUND_DURATION: 80000ms
+├── ROUNDS_PER_GAME: 3 (default, configurable)
+├── ROUND_DURATION: 80000ms (default, configurable)
 ├── WORD_CHOICE_TIME: 15000ms
 ├── HINT_INTERVALS: [20000, 40000, 60000]ms
-└── MIN/MAX_PLAYERS: 2-6
+├── MIN/MAX_PLAYERS: 2-6
+├── MAX_SCORE: 1000
+├── MIN_SCORE: 500
+└── DRAWER_SCORE_MULTIPLIER: 0.5
 
 CANVAS_CONFIG:
 ├── WIDTH/HEIGHT: 800x600
 ├── BRUSH_SIZE: 1-50 (default 5)
-└── BATCH_INTERVAL: 16ms (60fps)
+├── BATCH_INTERVAL: 16ms (60fps)
+└── DEFAULT_COLOR: '#000000'
+
+DIFFICULTY_CONFIG:
+├── EASY: 1.0x multiplier 🟢
+├── MEDIUM: 1.5x multiplier 🟡
+└── HARD: 2.0x multiplier 🔴
+
+BONUS_CONFIG:
+├── SPEED bonuses (Lightning, Quick, Fast)
+├── FIRST_BLOOD: +200
+├── STREAK: +100 per level (max +500)
+└── PERFECT_ROUND: guesser +300, drawer +500
+
+POWERUP_CONFIG:
+├── Hint powerups (reveal_letter, word_length, category_hint)
+├── Drawing powerups (extra_time, undo)
+└── Universal powerups (double_points, streak_shield)
 ```
 
 ## Important Implementation Details
@@ -167,10 +244,21 @@ CANVAS_CONFIG:
 - Drawer validation: Only current drawer can select word or emit drawing events
 - Coordinate bounds: Drawing events validated within canvas bounds (-10 to 810, -10 to 610)
 - Room capacity: Max 6 players enforced
+- Chat messages: Max 100 characters, trimmed
+- Powerup purchases: Cost validation, inventory management
+- Powerup activation: Role validation (drawer-only, guesser-only)
 
 **Client-side validation**:
 - Form inputs (player name, room code)
 - UI restrictions (non-drawer cannot draw, non-host cannot start game)
+- Powerup purchase buttons disabled if insufficient points
+
+### Guess Validation
+
+The server uses Levenshtein distance algorithm (edit distance) to provide feedback on guesses:
+- Distance 0: Exact match → Correct guess
+- Distance 1-2: Close guess → `guess:close` event for near-misses
+- Higher distance: Normal chat message
 
 ### Security Middleware
 
@@ -192,6 +280,10 @@ Server uses:
 - When exceeded, keeps only last 5,000
 - Prevents unbounded memory growth in long games
 
+**Powerup Effects:**
+- Active effects automatically cleaned up when expired
+- Checked before application and periodically cleaned
+
 ### Environment Variables
 
 Server expects:
@@ -202,32 +294,6 @@ NODE_ENV=development               # Environment
 ```
 
 Client connects to server at `http://localhost:3001` (hardcoded in socket.service.ts).
-
-## Known Incomplete Features
-
-The following features are partially implemented and may need completion:
-
-1. **Chat/Guessing System**:
-   - `chat:message` event defined but handler incomplete in `gameEvents.ts`
-   - Guess detection (word matching logic) not implemented
-   - Score calculation on correct guess missing
-
-2. **Rejoin Functionality**:
-   - `room:rejoin` and `room:rejoin:failed` events defined
-   - No handler implementation for reconnecting dropped players
-
-3. **Rate Limiting**:
-   - `RATE_LIMITS` constants defined in `/shared/constants.ts`
-   - Middleware exists but not applied to socket events
-
-4. **Scoring System**:
-   - Player scores exist in data model
-   - Full scoring logic (time-based, drawer bonus) not visible in current code
-
-5. **Validation Relaxation** (for testing):
-   - Minimum 2-player check may be commented out
-   - Drawer-only drawing validation may be disabled
-   - Review before production deployment
 
 ## Code Patterns to Follow
 
@@ -294,13 +360,20 @@ useEffect(() => {
 3. **Game stuck in phase**: Check timer cleanup in GameService
 4. **Room not found**: Verify socketToRoom mapping and room cleanup hasn't removed active rooms
 5. **Players not updating**: Check `room:players:update` broadcast in room event handlers
+6. **Powerups not working**: Check player inventory, active effects, and role validation
+7. **Scoring issues**: Verify timer accuracy, difficulty multiplier, and bonus calculations
+8. **Guess detection failing**: Check Levenshtein distance calculation and case-insensitive matching
 
 ## File Structure Reference
 
 ```
 /client
 ├── /src
-│   ├── /components          # React components (Canvas, Game, Lobby)
+│   ├── /components
+│   │   ├── /Canvas         # DrawingCanvas component
+│   │   ├── /Game           # GameRoom, Chat, PowerupBar, PowerupShop, Timer, WordDisplay
+│   │   ├── /Lobby          # RoomCreator, RoomJoiner
+│   │   └── /UI             # Reusable UI components
 │   ├── /contexts           # SocketContext for global socket access
 │   ├── /services           # socket.service.ts, drawingOptimizer.ts
 │   └── /types              # TypeScript interfaces
@@ -308,9 +381,9 @@ useEffect(() => {
 ├── /src
 │   ├── /middleware         # Express middleware (error handling)
 │   ├── /models             # Data models (Room, Player, GameState)
-│   ├── /services           # Business logic (RoomService, GameService, WordService)
-│   ├── /socket             # Socket.IO handlers (socketHandler, room/game/drawing events)
-│   └── /utils              # Utilities (logger, wordList, roomCodeGenerator)
+│   ├── /services           # Business logic (RoomService, GameService, WordService, PowerupService)
+│   ├── /socket             # Socket.IO handlers (socketHandler, room/game/drawing/powerup events)
+│   └── /utils              # Utilities (logger, wordList, roomCodeGenerator, guessValidator)
 /shared
 ├── constants.ts            # Game configuration constants
 └── eventNames.ts           # Socket.IO event name constants

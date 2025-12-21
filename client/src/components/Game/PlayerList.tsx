@@ -17,18 +17,6 @@ const getRankEmoji = (rank: number) => {
   }
 };
 
-const getAvatarColor = (index: number) => {
-  const colors = [
-    'from-purple-400 to-purple-600',
-    'from-blue-400 to-blue-600',
-    'from-green-400 to-green-600',
-    'from-yellow-400 to-yellow-600',
-    'from-red-400 to-red-600',
-    'from-pink-400 to-pink-600',
-  ];
-  return colors[index % colors.length];
-};
-
 export const PlayerList: React.FC<PlayerListProps> = ({ players, currentUserId, hostId, currentDrawerId }) => {
   // Sort players by score for ranking
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
@@ -80,8 +68,12 @@ export const PlayerList: React.FC<PlayerListProps> = ({ players, currentUserId, 
                   </div>
 
                   {/* Avatar */}
-                  <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${getAvatarColor(index)} flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
-                    {player.name.charAt(0).toUpperCase()}
+                  <div className="w-8 h-8 rounded-full overflow-hidden shadow-sm ring-2 ring-white">
+                    <img
+                      src={`/avatars/avatar-${player.avatar || 1}.jpg`}
+                      alt={player.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
 
                   {/* Player Info */}

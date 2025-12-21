@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSocket } from '../../contexts/SocketContext';
+import { AvatarSelector } from './AvatarSelector';
 
 interface RoomJoinerProps {
   onRoomJoined: (roomCode: string) => void;
@@ -8,6 +9,7 @@ interface RoomJoinerProps {
 export const RoomJoiner: React.FC<RoomJoinerProps> = ({ onRoomJoined }) => {
   const { socket } = useSocket();
   const [playerName, setPlayerName] = useState('');
+  const [selectedAvatar, setSelectedAvatar] = useState(1);
   const [roomCode, setRoomCode] = useState('');
   const [isJoining, setIsJoining] = useState(false);
   const [error, setError] = useState('');
@@ -48,6 +50,7 @@ export const RoomJoiner: React.FC<RoomJoinerProps> = ({ onRoomJoined }) => {
     socket.emit('room:join', {
       roomCode: roomCode.trim().toUpperCase(),
       playerName: playerName.trim(),
+      avatar: selectedAvatar,
     });
   };
 
@@ -77,6 +80,11 @@ export const RoomJoiner: React.FC<RoomJoinerProps> = ({ onRoomJoined }) => {
             disabled={isJoining}
           />
         </div>
+
+        <AvatarSelector
+          selectedAvatar={selectedAvatar}
+          onSelectAvatar={setSelectedAvatar}
+        />
 
         <div>
           <label htmlFor="roomCode" className="block text-sm font-medium text-gray-700 mb-2">

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSocket } from '../../contexts/SocketContext';
+import { AvatarSelector } from './AvatarSelector';
 
 interface RoomCreatorProps {
   onRoomCreated: (roomCode: string) => void;
@@ -8,6 +9,7 @@ interface RoomCreatorProps {
 export const RoomCreator: React.FC<RoomCreatorProps> = ({ onRoomCreated }) => {
   const { socket } = useSocket();
   const [playerName, setPlayerName] = useState('');
+  const [selectedAvatar, setSelectedAvatar] = useState(1);
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
 
@@ -39,7 +41,7 @@ export const RoomCreator: React.FC<RoomCreatorProps> = ({ onRoomCreated }) => {
     });
 
     // Emit create room event
-    socket.emit('room:create', { playerName: playerName.trim() });
+    socket.emit('room:create', { playerName: playerName.trim(), avatar: selectedAvatar });
   };
 
   return (
@@ -62,6 +64,11 @@ export const RoomCreator: React.FC<RoomCreatorProps> = ({ onRoomCreated }) => {
             disabled={isCreating}
           />
         </div>
+
+        <AvatarSelector
+          selectedAvatar={selectedAvatar}
+          onSelectAvatar={setSelectedAvatar}
+        />
 
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">

@@ -13,6 +13,7 @@ export interface ActiveEffect {
 export interface Player {
   socketId: string;
   name: string;
+  avatar: number;
   score: number;
   isReady: boolean;
   guessedCorrectly: boolean;
@@ -27,10 +28,11 @@ export interface Player {
   activeEffects: ActiveEffect[];
 }
 
-export function createPlayer(socketId: string, name: string): Player {
+export function createPlayer(socketId: string, name: string, avatar: number = 1): Player {
   return {
     socketId,
     name,
+    avatar,
     score: 0,
     isReady: false,
     guessedCorrectly: false,
