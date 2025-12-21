@@ -222,8 +222,8 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
             />
           </div>
 
-          {/* Size slider */}
-          <div className="flex items-center gap-2">
+          {/* Size slider and Clear button */}
+          <div className="flex items-center gap-3">
             <span className="text-sm font-medium text-gray-700">Size:</span>
             <input
               type="range"
@@ -234,15 +234,13 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
               className="flex-1"
             />
             <span className="text-sm text-gray-600 w-8">{size}</span>
+            <button
+              onClick={clearCanvas}
+              className="btn-secondary text-sm"
+            >
+              Clear
+            </button>
           </div>
-
-          {/* Clear button */}
-          <button
-            onClick={clearCanvas}
-            className="btn-secondary text-sm w-full"
-          >
-            Clear
-          </button>
         </div>
       )}
     </div>
