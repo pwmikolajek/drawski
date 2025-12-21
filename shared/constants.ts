@@ -169,6 +169,7 @@ export const POWERUP_CONFIG = {
 
 export const AVATAR_CONFIG = {
   DEFAULT_AVATAR: 1,
-  AVAILABLE_AVATARS: [1, 2, 3, 4],
+  AVAILABLE_AVATARS: [1, 2, 3, 4, 5, 6, 7, 8],
   AVATAR_PATH: '/avatars/avatar-',
+  AVATARS_PER_PAGE: 4,
 } as const;
