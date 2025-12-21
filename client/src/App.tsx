@@ -140,11 +140,6 @@ function App() {
             </div>
           </div>
         )}
-
-        {/* Footer */}
-        <div className="mt-12 text-center text-sm text-gray-500">
-          <p>Built with React, TypeScript, and Socket.IO</p>
-        </div>
       </div>
     </div>
   );

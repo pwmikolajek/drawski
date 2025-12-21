@@ -27,7 +27,7 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({ selectedAvatar, 
   };
 
   return (
-    <div className="py-6">
+    <div className="py-2">
       <label className="block text-sm font-medium text-gray-700 mb-4">
         Choose Your Avatar
       </label>
