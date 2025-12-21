@@ -6,6 +6,14 @@ export const EASY_WORDS = [
   'fish', 'bird', 'apple', 'pizza', 'cake', 'flower', 'clock', 'phone', 'shoe', 'hat',
   'chair', 'table', 'door', 'window', 'bed', 'lamp', 'cup', 'plate', 'fork', 'spoon',
   'pen', 'key', 'bag', 'box', 'gift', 'heart', 'smile', 'eye', 'hand', 'foot',
+  // Animals
+  'penguin', 'rabbit', 'duck', 'owl', 'frog', 'whale', 'shark', 'seal', 'bear', 'fox',
+  // Objects
+  'mirror', 'candle', 'kite', 'flag', 'coin', 'ring', 'watch', 'brush', 'towel', 'pillow',
+  // Nature
+  'cloud', 'rain', 'snow', 'wind', 'leaf', 'stone', 'grass', 'river', 'hill', 'beach',
+  // Food
+  'bread', 'soup', 'rice', 'meat', 'egg', 'milk', 'tea', 'ice', 'corn', 'bean',
 ];
 
 export const MEDIUM_WORDS = [
@@ -13,13 +21,33 @@ export const MEDIUM_WORDS = [
   'dragon', 'castle', 'treasure', 'pirate', 'robot', 'dinosaur', 'butterfly', 'hamburger', 'sandwich', 'umbrella',
   'computer', 'keyboard', 'monitor', 'airplane', 'helicopter', 'submarine', 'volcano', 'island', 'pyramid', 'bridge',
   'crown', 'sword', 'shield', 'potion', 'wizard', 'knight', 'princess', 'monster', 'spaceship', 'telescope',
+  // Animals
+  'kangaroo', 'crocodile', 'cheetah', 'peacock', 'parrot', 'squirrel', 'hedgehog', 'beaver',
+  // Objects
+  'carousel', 'fountain', 'lantern', 'microphone', 'trumpet', 'compass', 'anchor', 'helmet',
+  // Nature
+  'waterfall', 'canyon', 'desert', 'jungle', 'glacier', 'lightning', 'earthquake', 'comet',
+  // Food
+  'spaghetti', 'pancake', 'sushi', 'burrito', 'croissant', 'pretzel', 'muffin', 'smoothie',
+  // Professions
+  'firefighter', 'detective', 'astronaut', 'surgeon', 'architect', 'journalist',
 ];
 
 export const HARD_WORDS = [
   'microscope', 'saxophone', 'skyscraper', 'rollercoaster', 'refrigerator', 'chandelier', 'trampoline', 'xylophone',
   'constellation', 'architecture', 'kaleidoscope', 'periscope', 'photography', 'hieroglyphics', 'trapezoid',
   'pentagon', 'octagon', 'parallelogram', 'thermometer', 'barometer', 'accelerator', 'incubator', 'excavator',
-  'helicopter', 'submarine', 'parachute', 'gondola', 'caterpillar', 'rhinoceros', 'hippopotamus',
+  'parachute', 'gondola', 'caterpillar', 'rhinoceros', 'hippopotamus',
+  // Objects
+  'stethoscope', 'metronome', 'harmonica', 'binoculars', 'snowflake', 'labyrinth',
+  // Nature
+  'phenomenon', 'hurricane', 'tornado', 'avalanche', 'ecosystem', 'equinox',
+  // Abstract
+  'philosophy', 'encyclopedia', 'democracy', 'ceremony', 'navigation', 'revolution',
+  // Scientific
+  'molecule', 'observatory', 'laboratory', 'machinery', 'transformation',
+  // Architecture
+  'amphitheater', 'monument', 'cathedral', 'pavilion', 'sanctuary',
 ];
 
 // Tagged words with difficulty

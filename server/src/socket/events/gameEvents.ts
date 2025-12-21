@@ -3,6 +3,7 @@ import { roomService } from '../../services/roomService';
 import { gameService } from '../../services/gameService';
 import { logger } from '../../utils/logger';
 import { CHAT, GUESS } from '../../../../shared/eventNames';
+import { calculateLevenshteinDistance } from '../../utils/guessValidator';
 
 export function setupGameEvents(io: Server, socket: Socket) {
   // Handle word selection
@@ -67,15 +68,20 @@ export function setupGameEvents(io: Server, socket: Socket) {
             playerName: player.name,
             message: trimmedMessage,
             isCorrect: false,
+            isClose: false,
             timestamp: Date.now(),
           });
           return;
         }
 
-        // Check if guess is correct (case-insensitive, trim whitespace)
-        const isCorrect = trimmedMessage.toLowerCase() === room.gameState.currentWord.toLowerCase();
+        // Calculate Levenshtein distance to check how close the guess is
+        const distance = calculateLevenshteinDistance(
+          trimmedMessage.toLowerCase(),
+          room.gameState.currentWord.toLowerCase()
+        );
 
-        if (isCorrect) {
+        if (distance === 0) {
+          // Exact match - correct guess
           // Calculate and award score
           gameService.handleCorrectGuess(roomCode, socket.id);
 
@@ -89,16 +95,24 @@ export function setupGameEvents(io: Server, socket: Socket) {
             playerName: player.name,
             message: `${player.name} guessed the word!`,
             isCorrect: true,
+            isClose: false,
             timestamp: Date.now(),
           });
 
           logger.info(`Player ${player.name} guessed correctly in room ${roomCode}`);
-        } else {
-          // Wrong guess - show as "****" to other players to avoid giving hints
+        } else if (distance <= 2) {
+          // Close guess (1-2 characters different)
+          // Notify the guesser they are close
+          socket.emit(GUESS.CLOSE, {
+            message: "You're close! Keep trying!",
+          });
+
+          // Show "****" to other players to avoid giving hints
           socket.to(roomCode).emit(CHAT.RECEIVED, {
             playerName: player.name,
             message: '****',
             isCorrect: false,
+            isClose: false,
             timestamp: Date.now(),
           });
 
@@ -107,6 +121,27 @@ export function setupGameEvents(io: Server, socket: Socket) {
             playerName: player.name,
             message: trimmedMessage,
             isCorrect: false,
+            isClose: false,
+            timestamp: Date.now(),
+          });
+
+          logger.info(`Player ${player.name} made a close guess (distance: ${distance}) in room ${roomCode}`);
+        } else {
+          // Wrong guess - show as "****" to other players to avoid giving hints
+          socket.to(roomCode).emit(CHAT.RECEIVED, {
+            playerName: player.name,
+            message: '****',
+            isCorrect: false,
+            isClose: false,
+            timestamp: Date.now(),
+          });
+
+          // Show actual message to the player who sent it
+          socket.emit(CHAT.RECEIVED, {
+            playerName: player.name,
+            message: trimmedMessage,
+            isCorrect: false,
+            isClose: false,
             timestamp: Date.now(),
           });
         }
@@ -116,6 +151,7 @@ export function setupGameEvents(io: Server, socket: Socket) {
           playerName: player.name,
           message: trimmedMessage,
           isCorrect: false,
+          isClose: false,
           timestamp: Date.now(),
         });
       }

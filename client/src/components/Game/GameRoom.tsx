@@ -315,7 +315,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
               {gameState && gameState.status !== 'waiting' && gameState.status !== 'ended' && (
                 <button
                   onClick={() => setShowShop(true)}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-2 h-[42px]"
                 >
                   <span className="text-xl">🛒</span>
                   <span>Powerup Shop</span>
@@ -325,7 +325,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
 
               <button
                 onClick={handleLeaveRoom}
-                className="btn-secondary"
+                className="btn-secondary h-[42px] flex items-center"
               >
                 Leave Room
               </button>

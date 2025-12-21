@@ -55,6 +55,7 @@ export const CHAT = {
 
 export const GUESS = {
   CORRECT: 'guess:correct',
+  CLOSE: 'guess:close',
   ALREADY_GUESSED: 'guess:already:guessed',
 } as const;
 

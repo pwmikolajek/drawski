@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSocket } from './contexts/SocketContext';
 import { RoomCreator } from './components/Lobby/RoomCreator';
 import { RoomJoiner } from './components/Lobby/RoomJoiner';
@@ -15,6 +15,42 @@ function App() {
   const [showJoin, setShowJoin] = useState(false);
   const [initialPlayers, setInitialPlayers] = useState<Player[]>([]);
   const [initialGameState, setInitialGameState] = useState<GameState | null>(null);
+  const [isMusicMuted, setIsMusicMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Background music control
+  useEffect(() => {
+    if (!audioRef.current) {
+      const audio = new Audio('/sounds/bg-music.wav');
+      audio.loop = true;
+      audio.volume = 0.3; // 30% volume
+      audioRef.current = audio;
+    }
+
+    const audio = audioRef.current;
+
+    if (view === 'lobby') {
+      // Play music when in lobby
+      audio.play().catch(error => {
+        console.log('Audio play failed:', error);
+      });
+    } else {
+      // Pause music when leaving lobby
+      audio.pause();
+    }
+
+    return () => {
+      // Cleanup on unmount
+      audio.pause();
+    };
+  }, [view]);
+
+  // Mute/unmute control
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMusicMuted;
+    }
+  }, [isMusicMuted]);
 
   useEffect(() => {
     if (!socket) return;
@@ -93,6 +129,15 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center p-4">
+      {/* Music Toggle Button */}
+      <button
+        onClick={() => setIsMusicMuted(!isMusicMuted)}
+        className="fixed top-4 right-4 bg-white hover:bg-gray-100 text-gray-800 p-3 rounded-full shadow-lg transition-all hover:scale-110 z-50"
+        title={isMusicMuted ? 'Unmute music' : 'Mute music'}
+      >
+        <span className="text-2xl">{isMusicMuted ? '🔇' : '🔊'}</span>
+      </button>
+
       <div className="max-w-4xl w-full">
         {/* Header */}
         <div className="text-center mb-8">

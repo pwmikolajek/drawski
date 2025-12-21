@@ -189,55 +189,42 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       {isDrawer && (
         <div className="absolute bottom-4 left-4 right-4 bg-white rounded-lg shadow-lg p-4 space-y-3">
           {/* Color palette */}
-          <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-gray-700">Colors:</span>
-            <div className="flex flex-wrap gap-2">
-              {[
-                '#000000', // Black
-                '#FFFFFF', // White
-                '#FF0000', // Red
-                '#00FF00', // Green
-                '#0000FF', // Blue
-                '#FFFF00', // Yellow
-                '#FF6B00', // Orange
-                '#FF00FF', // Magenta
-                '#00FFFF', // Cyan
-                '#800080', // Purple
-                '#FFC0CB', // Pink
-                '#8B4513', // Brown
-                '#808080', // Gray
-                '#FFD700', // Gold
-                '#00FF7F', // Spring Green
-                '#4B0082', // Indigo
-                '#FF1493', // Deep Pink
-                '#32CD32', // Lime Green
-                '#1E90FF', // Dodger Blue
-                '#FF4500', // Orange Red
-              ].map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setColor(c)}
-                  className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${
-                    color === c ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'
-                  }`}
-                  style={{ backgroundColor: c }}
-                  title={c}
-                />
-              ))}
-              {/* Custom color picker */}
-              <input
-                type="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-                className="w-8 h-8 rounded-full cursor-pointer border-2 border-gray-300"
-                title="Custom color"
+          <div className="flex gap-2">
+            {[
+              '#000000', // Black
+              '#FFFFFF', // White
+              '#FF0000', // Red
+              '#0000FF', // Blue
+              '#00FF00', // Green
+              '#FFFF00', // Yellow
+              '#FF6B00', // Orange
+              '#800080', // Purple
+              '#FFC0CB', // Pink
+              '#8B4513', // Brown
+            ].map((c) => (
+              <button
+                key={c}
+                onClick={() => setColor(c)}
+                className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${
+                  color === c ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'
+                }`}
+                style={{ backgroundColor: c }}
+                title={c}
               />
-            </div>
+            ))}
+            {/* Custom color picker */}
+            <input
+              type="color"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              className="w-8 h-8 rounded-full cursor-pointer border-2 border-gray-300"
+              title="Custom color"
+            />
           </div>
 
           {/* Size slider and Clear button */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2 flex-1">
               <span className="text-sm font-medium text-gray-700">Size:</span>
               <input
                 type="range"
@@ -245,7 +232,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
                 max="50"
                 value={size}
                 onChange={(e) => setSize(Number(e.target.value))}
-                className="w-32"
+                className="flex-1"
               />
               <span className="text-sm text-gray-600 w-8">{size}</span>
             </div>

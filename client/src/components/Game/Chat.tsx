@@ -5,6 +5,7 @@ interface ChatMessage {
   playerName: string;
   message: string;
   isCorrect: boolean;
+  isClose: boolean;
   timestamp: number;
 }
 
@@ -32,7 +33,7 @@ export const Chat: React.FC<ChatProps> = ({ isDrawer }) => {
 
     // Listen for chat messages
     const handleChatReceived = (data: ChatMessage) => {
-      setMessages(prev => [...prev, data]);
+      setMessages(prev => [...prev, { ...data, isClose: data.isClose ?? false }]);
     };
 
     // Listen for correct guesses
@@ -41,16 +42,30 @@ export const Chat: React.FC<ChatProps> = ({ isDrawer }) => {
         playerName: 'System',
         message,
         isCorrect: true,
+        isClose: false,
+        timestamp: Date.now(),
+      }]);
+    };
+
+    // Listen for close guesses
+    const handleCloseGuess = ({ message }: { message: string }) => {
+      setMessages(prev => [...prev, {
+        playerName: 'System',
+        message,
+        isCorrect: false,
+        isClose: true,
         timestamp: Date.now(),
       }]);
     };
 
     socket.on('chat:received', handleChatReceived);
     socket.on('guess:correct', handleCorrectGuess);
+    socket.on('guess:close', handleCloseGuess);
 
     return () => {
       socket.off('chat:received', handleChatReceived);
       socket.off('guess:correct', handleCorrectGuess);
+      socket.off('guess:close', handleCloseGuess);
     };
   }, [socket]);
 
@@ -98,6 +113,8 @@ export const Chat: React.FC<ChatProps> = ({ isDrawer }) => {
               className={`p-2 rounded-lg ${
                 msg.isCorrect
                   ? 'bg-green-100 border border-green-300'
+                  : msg.isClose
+                  ? 'bg-yellow-100 border border-yellow-300'
                   : msg.playerName === 'System'
                   ? 'bg-blue-50 border border-blue-200'
                   : 'bg-gray-50'
@@ -105,7 +122,7 @@ export const Chat: React.FC<ChatProps> = ({ isDrawer }) => {
             >
               <div className="flex justify-between items-start">
                 <span className={`font-semibold text-sm ${
-                  msg.isCorrect ? 'text-green-700' : 'text-gray-700'
+                  msg.isCorrect ? 'text-green-700' : msg.isClose ? 'text-yellow-700' : 'text-gray-700'
                 }`}>
                   {msg.playerName}
                 </span>
@@ -114,7 +131,7 @@ export const Chat: React.FC<ChatProps> = ({ isDrawer }) => {
                 </span>
               </div>
               <p className={`text-sm mt-1 ${
-                msg.isCorrect ? 'text-green-800 font-medium' : 'text-gray-800'
+                msg.isCorrect ? 'text-green-800 font-medium' : msg.isClose ? 'text-yellow-800' : 'text-gray-800'
               }`}>
                 {msg.message}
               </p>
