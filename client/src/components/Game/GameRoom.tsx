@@ -498,7 +498,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                     <h2 className="text-2xl font-bold text-gray-800 mb-4">
                       Game Over!
                     </h2>
-                    <div className="bg-gray-50 rounded-lg p-6 max-w-md mx-auto">
+                    <div className="bg-gray-50 rounded-lg p-6 max-w-lg mx-auto">
                       <h3 className="font-semibold text-lg mb-3">Final Scores:</h3>
                       <div className="space-y-2 mb-6">
                         {players
@@ -506,15 +506,15 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                           .map((player, index) => (
                             <div
                               key={player.socketId}
-                              className={`flex justify-between items-center p-2 rounded ${
+                              className={`flex justify-between items-center p-3 rounded gap-4 ${
                                 index === 0 ? 'bg-yellow-100 font-bold' : 'bg-white'
                               }`}
                             >
-                              <span>
+                              <span className="truncate">
                                 {index === 0 && '👑 '}
                                 {player.name}
                               </span>
-                              <span>{player.score} pts</span>
+                              <span className="whitespace-nowrap font-semibold">{player.score} pts</span>
                             </div>
                           ))}
                       </div>
