@@ -190,7 +190,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
         <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded p-3">
           <div className="flex items-center gap-4">
             {/* Color palette */}
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               {[
                 '#000000', // Black
                 '#FFFFFF', // White
@@ -213,14 +213,22 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
                   title={c}
                 />
               ))}
-              {/* Custom color picker */}
-              <input
-                type="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-                className="w-8 h-8 rounded-full cursor-pointer border-2 border-gray-300"
-                title="Custom color"
-              />
+
+              {/* Separator */}
+              <div className="h-8 w-px bg-gray-300 mx-1"></div>
+
+              {/* Custom color picker with eyedropper icon */}
+              <label className="w-8 h-8 flex items-center justify-center cursor-pointer hover:scale-110 transition-all" title="Custom color">
+                <input
+                  type="color"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                  className="sr-only"
+                />
+                <svg className="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M12.293 1.293a1 1 0 011.414 0l5 5a1 1 0 010 1.414l-9 9a1 1 0 01-.707.293H4a1 1 0 01-1-1v-5a1 1 0 01.293-.707l9-9zM14 4.414L15.586 6 7 14.586V13H5.414L14 4.414z"/>
+                </svg>
+              </label>
             </div>
 
             {/* Size slider */}
