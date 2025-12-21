@@ -492,11 +492,6 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                         💬 Type your guess in the chat on the right!
                       </div>
                     )}
-                    {isDrawer && (
-                      <div className="text-center text-sm text-gray-600 mt-2">
-                        🎨 Draw the word for others to guess!
-                      </div>
-                    )}
                   </div>
                 </div>
               ) : gameState?.status === 'ended' ? (

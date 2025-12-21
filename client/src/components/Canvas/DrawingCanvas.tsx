@@ -176,7 +176,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     <div className="relative">
       <canvas
         ref={canvasRef}
-        className={`border-2 border-gray-300 rounded-lg bg-white ${
+        className={`bg-white ${
           isDrawer ? 'cursor-crosshair' : 'cursor-not-allowed'
         }`}
         onMouseDown={startDrawing}
@@ -187,7 +187,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       />
 
       {isDrawer && (
-        <div className="absolute bottom-4 left-4 right-4 bg-white rounded-lg shadow-lg p-4 space-y-3">
+        <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded p-3 space-y-2">
           {/* Color palette */}
           <div className="flex gap-2">
             {[
