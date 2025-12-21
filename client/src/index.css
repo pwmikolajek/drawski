@@ -5,6 +5,36 @@
 @layer base {
   body {
     @apply bg-gray-50 text-gray-900 antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-color: #f0f9ff;
+    opacity: 0.3;
+    background-image:
+      linear-gradient(#0284c7 1px, transparent 1px),
+      linear-gradient(to right, #0284c7 1px, #f0f9ff 1px);
+    background-size: 20px 20px;
+    transform: rotate(45deg);
+    animation: slide-background 60s linear infinite;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  @keyframes slide-background {
+    from {
+      transform: rotate(45deg) translateX(0);
+    }
+    to {
+      transform: rotate(45deg) translateX(-20px);
+    }
   }
 }
 

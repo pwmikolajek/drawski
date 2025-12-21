@@ -16,9 +16,10 @@ function App() {
   const [initialPlayers, setInitialPlayers] = useState<Player[]>([]);
   const [initialGameState, setInitialGameState] = useState<GameState | null>(null);
   const [isMusicMuted, setIsMusicMuted] = useState(false);
+  const [musicReady, setMusicReady] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Background music control
+  // Initialize audio
   useEffect(() => {
     if (!audioRef.current) {
       const audio = new Audio('/sounds/bg-music.wav');
@@ -26,13 +27,17 @@ function App() {
       audio.volume = 0.3; // 30% volume
       audioRef.current = audio;
     }
+  }, []);
 
+  // Background music control
+  useEffect(() => {
     const audio = audioRef.current;
+    if (!audio) return;
 
-    if (view === 'lobby') {
+    if (view === 'lobby' && musicReady) {
       // Play music when in lobby
       audio.play().catch(error => {
-        console.log('Audio play failed:', error);
+        console.log('Audio play failed (autoplay blocked):', error);
       });
     } else {
       // Pause music when leaving lobby
@@ -43,7 +48,7 @@ function App() {
       // Cleanup on unmount
       audio.pause();
     };
-  }, [view]);
+  }, [view, musicReady]);
 
   // Mute/unmute control
   useEffect(() => {
@@ -127,15 +132,30 @@ function App() {
     );
   }
 
+  const handleMusicToggle = () => {
+    if (!musicReady) {
+      // First interaction - enable music
+      setMusicReady(true);
+      setIsMusicMuted(false);
+    } else {
+      // Toggle mute
+      setIsMusicMuted(!isMusicMuted);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center p-4">
       {/* Music Toggle Button */}
       <button
-        onClick={() => setIsMusicMuted(!isMusicMuted)}
-        className="fixed top-4 right-4 bg-white hover:bg-gray-100 text-gray-800 p-3 rounded-full shadow-lg transition-all hover:scale-110 z-50"
-        title={isMusicMuted ? 'Unmute music' : 'Mute music'}
+        onClick={handleMusicToggle}
+        className={`fixed top-4 right-4 bg-white hover:bg-gray-100 text-gray-800 p-3 rounded-full shadow-lg transition-all hover:scale-110 z-50 ${
+          !musicReady ? 'animate-pulse' : ''
+        }`}
+        title={!musicReady ? 'Click to enable music' : isMusicMuted ? 'Unmute music' : 'Mute music'}
       >
-        <span className="text-2xl">{isMusicMuted ? '🔇' : '🔊'}</span>
+        <span className="text-2xl">
+          {!musicReady ? '🎵' : isMusicMuted ? '🔇' : '🔊'}
+        </span>
       </button>
 
       <div className="max-w-4xl w-full">
