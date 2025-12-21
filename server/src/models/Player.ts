@@ -1,4 +1,9 @@
-export type PowerupId = 'reveal_letter' | 'word_length' | 'category_hint' | 'extra_time' | 'undo' | 'double_points' | 'streak_shield';
+export type PowerupId =
+  | 'reveal_letter' | 'extra_time' | 'streak_shield'
+  | 'time_warp' | 'sketch_vision' | 'triple_points'
+  | 'blind_spot' | 'point_steal' | 'canvas_chaos'
+  | 'brush_sabotage' | 'speed_curse'
+  | 'oracle_hint' | 'canvas_rewind';
 
 export interface PowerupInventory {
   [key: string]: number; // powerupId -> count
@@ -8,6 +13,15 @@ export interface ActiveEffect {
   type: PowerupId;
   activatedAt: number;
   expiresAt?: number;
+}
+
+export interface PlayerCooldown {
+  lastUsedAt: number;
+  canUseAgainAt: number;
+}
+
+export interface PlayerCooldowns {
+  [powerupId: string]: PlayerCooldown;
 }
 
 export interface Player {
@@ -26,6 +40,7 @@ export interface Player {
   // Power-ups
   powerups: PowerupInventory;
   activeEffects: ActiveEffect[];
+  cooldowns: PlayerCooldowns;
 }
 
 export function createPlayer(socketId: string, name: string, avatar: number = 1): Player {
@@ -43,5 +58,6 @@ export function createPlayer(socketId: string, name: string, avatar: number = 1)
     totalCorrectGuesses: 0,
     powerups: {},
     activeEffects: [],
+    cooldowns: {},
   };
 }

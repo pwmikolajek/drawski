@@ -97,74 +97,212 @@ export const BONUS_CONFIG = {
 } as const;
 
 export const POWERUP_CONFIG = {
-  // Hint power-ups (for guessers)
+  // ===== KEPT POWERUPS (3) =====
   REVEAL_LETTER: {
     id: 'reveal_letter',
     name: 'Reveal Letter',
     description: 'Reveal one random letter in the word',
-    cost: 300,
+    basePrice: 300,
     badge: '💡',
     type: 'hint' as const,
     usableBy: 'guesser' as const,
+    effectDuration: 0,
+    personalCooldown: 0,
+    globalCooldown: 0,
+    maxUsesPerRound: 999,
   },
-  WORD_LENGTH: {
-    id: 'word_length',
-    name: 'Word Length',
-    description: 'Show the exact number of letters',
-    cost: 150,
-    badge: '📏',
-    type: 'hint' as const,
-    usableBy: 'guesser' as const,
-  },
-  CATEGORY_HINT: {
-    id: 'category_hint',
-    name: 'Category Hint',
-    description: 'Reveal the word category (Animal, Object, etc.)',
-    cost: 200,
-    badge: '🏷️',
-    type: 'hint' as const,
-    usableBy: 'guesser' as const,
-  },
-
-  // Drawing power-ups (for drawers)
   EXTRA_TIME: {
     id: 'extra_time',
     name: 'Extra Time',
     description: 'Add 30 seconds to the round timer',
-    cost: 400,
+    basePrice: 400,
     badge: '⏰',
     type: 'drawing' as const,
     usableBy: 'drawer' as const,
-  },
-  UNDO: {
-    id: 'undo',
-    name: 'Undo',
-    description: 'Undo your last drawing stroke',
-    cost: 100,
-    badge: '↩️',
-    type: 'drawing' as const,
-    usableBy: 'drawer' as const,
-  },
-
-  // Universal power-ups
-  DOUBLE_POINTS: {
-    id: 'double_points',
-    name: '2x Points',
-    description: 'Double your points for the next correct guess',
-    cost: 500,
-    badge: '⭐',
-    type: 'universal' as const,
-    usableBy: 'guesser' as const,
+    effectDuration: 0,
+    personalCooldown: 0,
+    globalCooldown: 0,
+    maxUsesPerRound: 999,
   },
   STREAK_SHIELD: {
     id: 'streak_shield',
     name: 'Streak Shield',
     description: 'Protect your streak for one round if you fail',
-    cost: 350,
+    basePrice: 350,
     badge: '🛡️',
-    type: 'universal' as const,
+    type: 'defensive' as const,
     usableBy: 'guesser' as const,
+    effectDuration: 120000,
+    personalCooldown: 0,
+    globalCooldown: 0,
+    maxUsesPerRound: 999,
   },
+
+  // ===== NEW SELF-HELP POWERUPS (3) =====
+  TIME_WARP: {
+    id: 'time_warp',
+    name: 'Time Warp',
+    description: 'Freeze the round timer for 15 seconds',
+    basePrice: 600,
+    badge: '⏳',
+    type: 'tactical' as const,
+    usableBy: 'guesser' as const,
+    effectDuration: 15000,
+    personalCooldown: 45000,
+    globalCooldown: 30000,
+    maxUsesPerRound: 2,
+  },
+  SKETCH_VISION: {
+    id: 'sketch_vision',
+    name: 'Sketch Vision',
+    description: "See the drawer's canvas in real-time for 20 seconds",
+    basePrice: 450,
+    badge: '👁️',
+    type: 'self_help' as const,
+    usableBy: 'guesser' as const,
+    effectDuration: 20000,
+    personalCooldown: 60000,
+    globalCooldown: 0,
+    maxUsesPerRound: 1,
+  },
+  TRIPLE_POINTS: {
+    id: 'triple_points',
+    name: '3x Points',
+    description: 'Triple your points for the next correct guess',
+    basePrice: 700,
+    badge: '💰',
+    type: 'self_help' as const,
+    usableBy: 'guesser' as const,
+    effectDuration: 120000,
+    personalCooldown: 0,
+    globalCooldown: 0,
+    maxUsesPerRound: 999,
+  },
+
+  // ===== NEW COMPETITIVE POWERUPS (5) =====
+  BLIND_SPOT: {
+    id: 'blind_spot',
+    name: 'Blind Spot',
+    description: "Cover 30% of a target player's canvas with fog for 25 seconds",
+    basePrice: 550,
+    badge: '🌫️',
+    type: 'competitive' as const,
+    usableBy: 'guesser' as const,
+    requiresTarget: true,
+    effectDuration: 25000,
+    personalCooldown: 90000,
+    globalCooldown: 0,
+    maxUsesPerRound: 3,
+  },
+  POINT_STEAL: {
+    id: 'point_steal',
+    name: 'Point Steal',
+    description: "Steal 15% of target player's current score (100-400 points)",
+    basePrice: 500,
+    badge: '💸',
+    type: 'competitive' as const,
+    usableBy: 'both' as const,
+    requiresTarget: true,
+    effectDuration: 0,
+    personalCooldown: 120000,
+    globalCooldown: 60000,
+    maxUsesPerRound: 2,
+  },
+  CANVAS_CHAOS: {
+    id: 'canvas_chaos',
+    name: 'Canvas Chaos',
+    description: "Invert colors on target player's screen for 20 seconds",
+    basePrice: 400,
+    badge: '🎨',
+    type: 'competitive' as const,
+    usableBy: 'guesser' as const,
+    requiresTarget: true,
+    effectDuration: 20000,
+    personalCooldown: 75000,
+    globalCooldown: 0,
+    maxUsesPerRound: 4,
+  },
+  BRUSH_SABOTAGE: {
+    id: 'brush_sabotage',
+    name: 'Brush Sabotage',
+    description: 'Force drawer to use random brush size (1-50) for 15 seconds',
+    basePrice: 650,
+    badge: '🖌️',
+    type: 'competitive' as const,
+    usableBy: 'guesser' as const,
+    requiresTarget: false,
+    effectDuration: 15000,
+    personalCooldown: 90000,
+    globalCooldown: 45000,
+    maxUsesPerRound: 2,
+  },
+  SPEED_CURSE: {
+    id: 'speed_curse',
+    name: 'Speed Curse',
+    description: "Halve the next correct guess points for target player",
+    basePrice: 350,
+    badge: '⚡',
+    type: 'competitive' as const,
+    usableBy: 'guesser' as const,
+    requiresTarget: true,
+    effectDuration: 120000,
+    personalCooldown: 60000,
+    globalCooldown: 0,
+    maxUsesPerRound: 3,
+  },
+
+  // ===== NEW TACTICAL POWERUPS (2) =====
+  ORACLE_HINT: {
+    id: 'oracle_hint',
+    name: 'Oracle Hint',
+    description: "Reveal the word's category AND first letter",
+    basePrice: 400,
+    badge: '🔮',
+    type: 'tactical' as const,
+    usableBy: 'guesser' as const,
+    effectDuration: 0,
+    personalCooldown: 999999,
+    globalCooldown: 0,
+    maxUsesPerRound: 1,
+  },
+  CANVAS_REWIND: {
+    id: 'canvas_rewind',
+    name: 'Canvas Rewind',
+    description: 'Restore canvas to state from 20 seconds ago',
+    basePrice: 500,
+    badge: '⏮️',
+    type: 'tactical' as const,
+    usableBy: 'drawer' as const,
+    effectDuration: 0,
+    personalCooldown: 60000,
+    globalCooldown: 0,
+    maxUsesPerRound: 2,
+  },
+} as const;
+
+export const POWERUP_PRICING = {
+  // Position-based multipliers (based on player ranking)
+  POSITION_MULTIPLIERS: {
+    FIRST: 1.2,      // +20% for 1st place
+    SECOND: 1.05,    // +5% for 2nd place
+    THIRD: 1.0,      // Base price for 3rd place
+    FOURTH: 0.9,     // -10% for 4th place
+    FIFTH: 0.8,      // -20% for 5th place
+    LAST: 0.75,      // -25% for last place
+  },
+  // Time-based multipliers (based on round progress)
+  TIME_MULTIPLIERS: {
+    EARLY: 1.33,     // +33% in first third of round
+    MID: 1.0,        // Base price in middle third
+    LATE: 0.67,      // -33% in final third
+  },
+  // Anti-griefing and comeback mechanics
+  GRIEFING_PENALTY: 1.35,     // +35% for targeting last place
+  COMEBACK_BONUS: 0.6,        // -40% for last place using offensive
+  LEADER_PENALTY: 1.6,        // +60% for 1st place using offensive
+  // Price bounds
+  MIN_MULTIPLIER: 0.5,        // Price can't go below 50% of base
+  MAX_MULTIPLIER: 2.0,        // Price can't exceed 200% of base
 } as const;
 
 export const AVATAR_CONFIG = {

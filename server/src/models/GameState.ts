@@ -21,6 +21,9 @@ export interface GameState {
   // Bonus tracking
   firstBloodAwarded: boolean;
   guessTimeStamps: Map<string, number>; // socketId -> timestamp when they guessed
+  // Powerup effects
+  timePausedUntil: number | null; // Time Warp: timestamp when timer can resume
+  brushSabotageActive: boolean; // Brush Sabotage: random brush sizes active
 }
 
 export function createGameState(maxRounds: number = 3, roundDuration: number = 80000): GameState {
@@ -37,5 +40,7 @@ export function createGameState(maxRounds: number = 3, roundDuration: number = 8
     wordOptions: null,
     firstBloodAwarded: false,
     guessTimeStamps: new Map(),
+    timePausedUntil: null,
+    brushSabotageActive: false,
   };
 }

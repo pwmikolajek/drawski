@@ -63,3 +63,40 @@ export const GUESS = {
 export const HINT = {
   REVEALED: 'hint:revealed',
 } as const;
+
+// Powerup Events
+export const POWERUP = {
+  // General powerup actions
+  BUY: 'powerup:buy',
+  ACTIVATE: 'powerup:activate',
+  PURCHASED: 'powerup:purchased',
+  ACTIVATED: 'powerup:activated',
+  ERROR: 'powerup:error',
+
+  // Dynamic pricing
+  GET_PRICE: 'powerup:get_price',
+  PRICE_UPDATE: 'powerup:price_update',
+
+  // Specific powerup effects
+  TIME_WARP_ACTIVATED: 'powerup:time_warp:activated',
+  TIME_WARP_ENDED: 'powerup:time_warp:ended',
+
+  SKETCH_VISION_GRANTED: 'powerup:sketch_vision:granted',
+
+  BLIND_SPOT_APPLIED: 'powerup:blind_spot:applied',
+  BLIND_SPOT_ENDED: 'powerup:blind_spot:ended',
+
+  POINT_STEAL_EXECUTED: 'powerup:point_steal:executed',
+
+  CANVAS_CHAOS_APPLIED: 'powerup:canvas_chaos:applied',
+  CANVAS_CHAOS_ENDED: 'powerup:canvas_chaos:ended',
+
+  BRUSH_SABOTAGE_ACTIVATED: 'powerup:brush_sabotage:activated',
+  BRUSH_SABOTAGE_ENDED: 'powerup:brush_sabotage:ended',
+
+  SPEED_CURSE_APPLIED: 'powerup:speed_curse:applied',
+
+  ORACLE_HINT_REVEALED: 'powerup:oracle_hint:revealed',
+
+  CANVAS_REWIND_ACTIVATED: 'powerup:canvas_rewind:activated',
+} as const;
