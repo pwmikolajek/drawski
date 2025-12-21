@@ -147,11 +147,6 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({ selectedAvatar, 
           ))}
         </div>
       )}
-
-      {/* Helper Text */}
-      <p className="text-xs text-gray-500 text-center mt-3">
-        {TOTAL_PAGES > 1 ? `${AVATARS.length} avatars • Page ${currentPage + 1} of ${TOTAL_PAGES}` : `${AVATARS.length} avatars available`}
-      </p>
     </div>
   );
 };
