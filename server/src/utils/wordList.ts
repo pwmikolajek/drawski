@@ -6,6 +6,7 @@ export const EASY_WORDS = [
   'fish', 'bird', 'apple', 'pizza', 'cake', 'flower', 'clock', 'phone', 'shoe', 'hat',
   'chair', 'table', 'door', 'window', 'bed', 'lamp', 'cup', 'plate', 'fork', 'spoon',
   'pen', 'key', 'bag', 'box', 'gift', 'heart', 'smile', 'eye', 'hand', 'foot',
+  'guitar', 'piano', 'camera', 'rocket', 'hamburger', 'sandwich', 'umbrella',
   // Animals
   'penguin', 'rabbit', 'duck', 'owl', 'frog', 'whale', 'shark', 'seal', 'bear', 'fox',
   // Objects
@@ -17,10 +18,11 @@ export const EASY_WORDS = [
 ];
 
 export const MEDIUM_WORDS = [
-  'elephant', 'giraffe', 'rainbow', 'mountain', 'ocean', 'guitar', 'piano', 'camera', 'bicycle', 'rocket',
-  'dragon', 'castle', 'treasure', 'pirate', 'robot', 'dinosaur', 'butterfly', 'hamburger', 'sandwich', 'umbrella',
+  'elephant', 'giraffe', 'rainbow', 'mountain', 'ocean', 'bicycle',
+  'dragon', 'castle', 'dinosaur', 'butterfly',
   'computer', 'keyboard', 'monitor', 'airplane', 'helicopter', 'submarine', 'volcano', 'island', 'pyramid', 'bridge',
-  'crown', 'sword', 'shield', 'potion', 'wizard', 'knight', 'princess', 'monster', 'spaceship', 'telescope',
+  'crown', 'sword', 'shield', 'potion', 'knight', 'spaceship',
+  'caterpillar', 'rhinoceros', 'hippopotamus', 'parachute', 'gondola', 'snowflake', 'labyrinth',
   // Animals
   'kangaroo', 'crocodile', 'cheetah', 'peacock', 'parrot', 'squirrel', 'hedgehog', 'beaver',
   // Objects
@@ -30,16 +32,16 @@ export const MEDIUM_WORDS = [
   // Food
   'spaghetti', 'pancake', 'sushi', 'burrito', 'croissant', 'pretzel', 'muffin', 'smoothie',
   // Professions
-  'firefighter', 'detective', 'astronaut', 'surgeon', 'architect', 'journalist',
+  'firefighter', 'detective', 'astronaut', 'surgeon', 'architect',
 ];
 
 export const HARD_WORDS = [
   'microscope', 'saxophone', 'skyscraper', 'rollercoaster', 'refrigerator', 'chandelier', 'trampoline', 'xylophone',
   'constellation', 'architecture', 'kaleidoscope', 'periscope', 'photography', 'hieroglyphics', 'trapezoid',
   'pentagon', 'octagon', 'parallelogram', 'thermometer', 'barometer', 'accelerator', 'incubator', 'excavator',
-  'parachute', 'gondola', 'caterpillar', 'rhinoceros', 'hippopotamus',
+  'treasure', 'pirate', 'robot', 'wizard', 'princess', 'monster', 'telescope', 'journalist',
   // Objects
-  'stethoscope', 'metronome', 'harmonica', 'binoculars', 'snowflake', 'labyrinth',
+  'stethoscope', 'metronome', 'harmonica', 'binoculars',
   // Nature
   'phenomenon', 'hurricane', 'tornado', 'avalanche', 'ecosystem', 'equinox',
   // Abstract
