@@ -295,7 +295,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 p-3">
+    <div className="min-h-screen p-3">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-md p-3 mb-3">

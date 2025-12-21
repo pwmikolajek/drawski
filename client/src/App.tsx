@@ -81,13 +81,15 @@ function App() {
 
   if (view === 'game' && roomCode) {
     return (
-      <GameRoom
-        roomCode={roomCode}
-        isHost={isHost}
-        onLeaveRoom={handleLeaveRoom}
-        initialPlayers={initialPlayers}
-        initialGameState={initialGameState}
-      />
+      <div className="min-h-screen animated-grid-bg">
+        <GameRoom
+          roomCode={roomCode}
+          isHost={isHost}
+          onLeaveRoom={handleLeaveRoom}
+          initialPlayers={initialPlayers}
+          initialGameState={initialGameState}
+        />
+      </div>
     );
   }
 
