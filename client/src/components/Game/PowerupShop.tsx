@@ -95,7 +95,7 @@ export const PowerupShop: React.FC<PowerupShopProps> = ({
   return (
     <>
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden">
+        <div className="bg-white rounded-custom-radius shadow-custom-shadow max-w-4xl w-full max-h-[85vh] overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 text-white">
             <div className="flex justify-between items-center">
@@ -105,7 +105,7 @@ export const PowerupShop: React.FC<PowerupShopProps> = ({
               </div>
               <button
                 onClick={onClose}
-                className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors"
+                className="text-white hover:bg-white/20 rounded-custom-radius p-2 transition-colors"
               >
                 <span className="text-2xl">✕</span>
               </button>
@@ -124,9 +124,9 @@ export const PowerupShop: React.FC<PowerupShopProps> = ({
                 return (
                   <div
                     key={powerup.id}
-                    className={`relative border-2 rounded-xl p-4 transition-all ${
+                    className={`relative border-2 rounded-custom-radius p-4 transition-all ${
                       affordable
-                        ? 'border-purple-300 hover:border-purple-500 hover:shadow-lg'
+                        ? 'border-purple-300 hover:border-purple-500 hover:shadow-custom-shadow'
                         : 'border-gray-200 opacity-60'
                     }`}
                   >
@@ -176,7 +176,7 @@ export const PowerupShop: React.FC<PowerupShopProps> = ({
                       <button
                         onClick={() => handlePurchaseClick(powerup.id)}
                         disabled={!affordable || !priceLoaded}
-                        className={`w-full py-2 rounded-lg font-semibold transition-colors text-sm ${
+                        className={`w-full py-2 rounded-custom-radius font-semibold transition-colors text-sm ${
                           affordable && priceLoaded
                             ? 'bg-purple-600 hover:bg-purple-700 text-white'
                             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
@@ -203,7 +203,7 @@ export const PowerupShop: React.FC<PowerupShopProps> = ({
       {/* Target Selection Modal */}
       {selectedPowerup && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
+          <div className="bg-white rounded-custom-radius shadow-custom-shadow max-w-md w-full p-6">
             <h3 className="text-2xl font-bold mb-4">Select Target</h3>
             <p className="text-gray-600 mb-4">Choose which player to target with this powerup:</p>
 
@@ -216,7 +216,7 @@ export const PowerupShop: React.FC<PowerupShopProps> = ({
                     onClick={() => handleTargetSelect(player.socketId)}
                     onMouseEnter={() => setSelectedTarget(player.socketId)}
                     onMouseLeave={() => setSelectedTarget(null)}
-                    className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
+                    className={`w-full p-3 rounded-custom-radius border-2 transition-all text-left ${
                       selectedTarget === player.socketId
                         ? 'border-purple-500 bg-purple-50'
                         : 'border-gray-200 hover:border-gray-300'
@@ -224,7 +224,7 @@ export const PowerupShop: React.FC<PowerupShopProps> = ({
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg overflow-hidden shadow-sm ring-2 ring-white">
+                        <div className="w-8 h-8 rounded-custom-radius overflow-hidden shadow-custom-shadow ring-2 ring-white">
                           <img
                             src={`/avatars/avatar-${player.avatar || 1}.jpg`}
                             alt={player.name}
@@ -244,7 +244,7 @@ export const PowerupShop: React.FC<PowerupShopProps> = ({
                 setSelectedPowerup(null);
                 setSelectedTarget(null);
               }}
-              className="w-full py-2 rounded-lg border-2 border-gray-300 hover:bg-gray-50 transition-colors"
+              className="w-full py-2 rounded-custom-radius border-2 border-gray-300 hover:bg-gray-50 transition-colors"
             >
               Cancel
             </button>

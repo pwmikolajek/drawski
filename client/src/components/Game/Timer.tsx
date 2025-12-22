@@ -33,7 +33,7 @@ export const Timer: React.FC<TimerProps> = ({ duration, startTime }) => {
   };
 
   return (
-    <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm whitespace-nowrap">
+    <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-custom-radius shadow-custom-shadow whitespace-nowrap">
       <span className="text-sm font-medium text-gray-700">⏱️</span>
       <span className={`text-lg font-bold ${
         percentage <= 20 ? 'text-red-600 animate-pulse' :

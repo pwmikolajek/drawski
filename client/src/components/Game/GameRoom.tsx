@@ -325,7 +325,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
               {gameState && gameState.status !== 'waiting' && gameState.status !== 'ended' && (
                 <button
                   onClick={() => setShowShop(true)}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-2 h-[42px]"
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-custom-radius font-semibold shadow-custom-shadow hover:shadow-custom-shadow transition-all flex items-center gap-2 h-[42px]"
                 >
                   <span className="text-xl">🛒</span>
                   <span>Powerup Shop</span>
@@ -414,7 +414,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
               ) : gameState?.status === 'drawing' ? (
                 <div className="space-y-3">
                   {/* Game Status Bar */}
-                  <div className="bg-gradient-to-r from-primary-50 to-primary-100 p-3 rounded-lg shadow-sm">
+                  <div className="bg-gradient-to-r from-primary-50 to-primary-100 p-3 rounded-custom-radius shadow-custom-shadow">
                     <div className="flex items-center justify-between gap-3">
                       {/* Round Info with Multiplier */}
                       <div className="flex-shrink-0">
@@ -424,10 +424,10 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                         {currentWordDifficulty && (
                           <div className={`mt-1.5 inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold ${
                             currentWordDifficulty === 'easy'
-                              ? 'bg-green-50 text-green-700 shadow-sm shadow-green-200 animate-pulse-soft' :
+                              ? 'bg-green-50 text-green-700 shadow-custom-shadow animate-pulse-soft' :
                             currentWordDifficulty === 'medium'
-                              ? 'bg-yellow-50 text-yellow-700 shadow-sm shadow-yellow-200 animate-pulse-soft' :
-                              'bg-red-50 text-red-700 shadow-sm shadow-red-200 animate-pulse-soft'
+                              ? 'bg-yellow-50 text-yellow-700 shadow-custom-shadow animate-pulse-soft' :
+                              'bg-red-50 text-red-700 shadow-custom-shadow animate-pulse-soft'
                           }`}>
                             <span className="mr-1">
                               {currentWordDifficulty === 'easy' ? '🟢' :
@@ -445,11 +445,11 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                       <div className="flex-1 flex items-center justify-center min-w-0">
                         {isDrawer ? (
                           currentWord ? (
-                            <div className="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg font-bold text-lg shadow-sm">
+                            <div className="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-custom-radius font-bold text-lg shadow-custom-shadow">
                               Your word: <span className="text-yellow-900">{currentWord}</span>
                             </div>
                           ) : (
-                            <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-bold text-lg shadow-sm">
+                            <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-custom-radius font-bold text-lg shadow-custom-shadow">
                               🎨 You are the drawer!
                             </div>
                           )
@@ -471,9 +471,9 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                   </div>
 
                   {/* Drawing Canvas */}
-                  <div className="bg-white rounded-lg shadow-md p-3">
+                  <div className="bg-white rounded-custom-radius shadow-custom-shadow p-3">
                     <div className="flex justify-center">
-                      <div className="border-2 border-gray-200 rounded-lg overflow-hidden max-w-full shadow-lg">
+                      <div className="border-2 border-gray-200 rounded-custom-radius overflow-hidden max-w-full shadow-custom-shadow">
                         <DrawingCanvas
                           isDrawer={isDrawer}
                           width={800}
@@ -495,7 +495,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({
                     <h2 className="text-2xl font-bold text-gray-800 mb-4">
                       Game Over!
                     </h2>
-                    <div className="bg-gray-50 rounded-lg p-6 max-w-lg mx-auto">
+                    <div className="bg-gray-50 rounded-custom-radius p-6 max-w-lg mx-auto">
                       <h3 className="font-semibold text-lg mb-3">Final Scores:</h3>
                       <div className="space-y-2 mb-6">
                         {players

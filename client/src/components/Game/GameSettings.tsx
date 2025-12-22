@@ -20,7 +20,7 @@ export const GameSettings: React.FC<GameSettingsProps> = ({ onStartGame, onCance
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+      <div className="bg-white rounded-custom-radius shadow-custom-shadow max-w-md w-full p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Game Settings</h2>
 
         <div className="space-y-4">

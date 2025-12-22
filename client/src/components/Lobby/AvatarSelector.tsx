@@ -39,7 +39,7 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({ selectedAvatar, 
           <button
             type="button"
             onClick={goToPrevPage}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 bg-white hover:bg-gray-50 text-gray-700 rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 bg-white hover:bg-gray-50 text-gray-700 rounded-custom-radius p-2 shadow-custom-shadow hover:shadow-custom-shadow transition-all duration-200 hover:scale-110"
             aria-label="Previous avatars"
           >
             <svg
@@ -71,10 +71,10 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({ selectedAvatar, 
                 key={avatarNum}
                 type="button"
                 onClick={() => onSelectAvatar(avatarNum)}
-                className={`relative aspect-square rounded-2xl overflow-hidden transition-all duration-200 transform ${
+                className={`relative aspect-square rounded-custom-radius overflow-hidden transition-all duration-200 transform ${
                   selectedAvatar === avatarNum
-                    ? 'ring-4 ring-primary-500 ring-offset-2 scale-105 shadow-xl'
-                    : 'ring-2 ring-gray-200 hover:ring-primary-300 hover:scale-102 shadow-md hover:shadow-lg'
+                    ? 'ring-4 ring-primary-500 ring-offset-2 scale-105 shadow-custom-shadow'
+                    : 'ring-2 ring-gray-200 hover:ring-primary-300 hover:scale-102 shadow-custom-shadow'
                 }`}
               >
                 <img
@@ -84,7 +84,7 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({ selectedAvatar, 
                 />
                 {selectedAvatar === avatarNum && (
                   <div className="absolute inset-0 bg-primary-500 bg-opacity-20 flex items-center justify-center">
-                    <div className="bg-white rounded-full p-1.5 shadow-lg">
+                    <div className="bg-white rounded-custom-radius p-1.5 shadow-custom-shadow">
                       <svg
                         className="w-7 h-7 text-primary-500"
                         fill="currentColor"
@@ -109,7 +109,7 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({ selectedAvatar, 
           <button
             type="button"
             onClick={goToNextPage}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 bg-white hover:bg-gray-50 text-gray-700 rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 bg-white hover:bg-gray-50 text-gray-700 rounded-custom-radius p-2 shadow-custom-shadow hover:shadow-custom-shadow transition-all duration-200 hover:scale-110"
             aria-label="Next avatars"
           >
             <svg
@@ -137,7 +137,7 @@ export const AvatarSelector: React.FC<AvatarSelectorProps> = ({ selectedAvatar, 
               key={index}
               type="button"
               onClick={() => setCurrentPage(index)}
-              className={`transition-all duration-200 rounded-full ${
+              className={`transition-all duration-200 rounded-custom-radius ${
                 currentPage === index
                   ? 'w-8 h-2 bg-primary-500'
                   : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'

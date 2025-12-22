@@ -23,7 +23,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({ players, currentUserId, 
   const maxScore = Math.max(...players.map(p => p.score), 1);
 
   return (
-    <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-3">
+    <div className="bg-gradient-to-br from-white to-gray-50 rounded-custom-radius shadow-custom-shadow p-3">
       {/* Header */}
       <div className="flex items-center justify-between mb-2 pb-2 border-b-2 border-gray-200">
         <h3 className="text-base font-bold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
@@ -45,10 +45,10 @@ export const PlayerList: React.FC<PlayerListProps> = ({ players, currentUserId, 
           return (
             <div
               key={player.socketId}
-              className={`relative overflow-hidden rounded-lg transition-all duration-300 ${
+              className={`relative overflow-hidden rounded-custom-radius transition-all duration-300 ${
                 isCurrentUser
-                  ? 'ring-2 ring-primary-500 shadow-lg'
-                  : 'shadow-sm hover:shadow-md'
+                  ? 'ring-2 ring-primary-500 shadow-custom-shadow'
+                  : 'shadow-custom-shadow'
               } ${isDrawing ? 'ring-2 ring-purple-400 animate-pulse' : ''}`}
             >
               {/* Background gradient based on score */}
@@ -68,7 +68,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({ players, currentUserId, 
                   </div>
 
                   {/* Avatar */}
-                  <div className="w-10 h-10 rounded-lg overflow-hidden shadow-sm ring-2 ring-white flex-shrink-0">
+                  <div className="w-10 h-10 rounded-custom-radius overflow-hidden shadow-custom-shadow ring-2 ring-white flex-shrink-0">
                     <img
                       src={`/avatars/avatar-${player.avatar || 1}.jpg`}
                       alt={player.name}
@@ -124,7 +124,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({ players, currentUserId, 
       </div>
 
       {players.length < 2 && (
-        <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
+        <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded-custom-radius text-center">
           <p className="text-xs text-yellow-800 font-medium">
             ⏳ Waiting for more players...
           </p>

@@ -10,7 +10,7 @@ export const WordDisplay: React.FC<WordDisplayProps> = ({ word }) => {
   const letters = word.split('');
 
   return (
-    <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-lg shadow-sm">
+    <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-custom-radius shadow-custom-shadow">
       {letters.map((letter, index) => (
         <div
           key={index}

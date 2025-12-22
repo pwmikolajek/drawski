@@ -89,7 +89,7 @@ export const Chat: React.FC<ChatProps> = ({ isDrawer }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-lg shadow-md">
+    <div className="flex flex-col h-full bg-white rounded-custom-radius shadow-custom-shadow">
       {/* Chat Header */}
       <div className="p-4 border-b border-gray-200">
         <h3 className="text-lg font-semibold text-gray-800">
@@ -110,7 +110,7 @@ export const Chat: React.FC<ChatProps> = ({ isDrawer }) => {
           messages.map((msg, index) => (
             <div
               key={index}
-              className={`p-2 rounded-lg ${
+              className={`p-2 rounded-custom-radius ${
                 msg.isCorrect
                   ? 'bg-green-100 border border-green-300'
                   : msg.isClose
@@ -143,7 +143,7 @@ export const Chat: React.FC<ChatProps> = ({ isDrawer }) => {
 
       {/* Input Area */}
       {!isDrawer && (
-        <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 flex-shrink-0 rounded-b-lg bg-white">
+        <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 flex-shrink-0 rounded-b-custom-radius bg-white">
           <div className="flex gap-2">
             <input
               type="text"
@@ -151,12 +151,12 @@ export const Chat: React.FC<ChatProps> = ({ isDrawer }) => {
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder="Type your guess..."
               maxLength={100}
-              className="flex-1 min-w-0 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+              className="flex-1 min-w-0 px-3 py-2 border border-gray-300 rounded-custom-radius focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
             />
             <button
               type="submit"
               disabled={!inputMessage.trim()}
-              className="flex-shrink-0 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium text-sm"
+              className="flex-shrink-0 px-4 py-2 bg-primary-600 text-white rounded-custom-radius hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium text-sm"
             >
               Send
             </button>
@@ -165,7 +165,7 @@ export const Chat: React.FC<ChatProps> = ({ isDrawer }) => {
       )}
 
       {isDrawer && (
-        <div className="p-4 border-t border-gray-200 bg-gray-50 text-center text-gray-600 text-sm flex-shrink-0 rounded-b-lg">
+        <div className="p-4 border-t border-gray-200 bg-gray-50 text-center text-gray-600 text-sm flex-shrink-0 rounded-b-custom-radius">
           🎨 You cannot send messages while drawing
         </div>
       )}

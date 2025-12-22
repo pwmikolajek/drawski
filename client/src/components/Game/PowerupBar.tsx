@@ -65,7 +65,7 @@ export const PowerupBar: React.FC<PowerupBarProps> = ({
       {/* Toggle Button */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:scale-110 transition-transform mb-3 relative"
+        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-custom-radius w-14 h-14 flex items-center justify-center shadow-custom-shadow hover:scale-110 transition-transform mb-3 relative"
       >
         <span className="text-2xl">{expanded ? '✕' : '⚡'}</span>
         {availablePowerups.length > 0 && (
@@ -77,7 +77,7 @@ export const PowerupBar: React.FC<PowerupBarProps> = ({
 
       {/* Powerup Panel */}
       {expanded && (
-        <div className="bg-white rounded-xl shadow-2xl p-4 w-72 max-h-96 overflow-y-auto">
+        <div className="bg-white rounded-custom-radius shadow-custom-shadow p-4 w-72 max-h-96 overflow-y-auto">
           <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
             <span>⚡</span>
             <span>Your Powerups</span>
@@ -96,7 +96,7 @@ export const PowerupBar: React.FC<PowerupBarProps> = ({
                 return (
                   <div
                     key={index}
-                    className="bg-green-50 border border-green-200 rounded-lg p-2 mb-2"
+                    className="bg-green-50 border border-green-200 rounded-custom-radius p-2 mb-2"
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-xl">{powerup.badge}</span>
@@ -129,7 +129,7 @@ export const PowerupBar: React.FC<PowerupBarProps> = ({
                 return (
                   <div
                     key={powerupId}
-                    className={`border-2 rounded-lg p-3 transition-colors ${
+                    className={`border-2 rounded-custom-radius p-3 transition-colors ${
                       onCooldown || isActive
                         ? 'border-gray-200 opacity-60'
                         : 'border-gray-200 hover:border-purple-300'
@@ -156,7 +156,7 @@ export const PowerupBar: React.FC<PowerupBarProps> = ({
                     <button
                       onClick={() => onActivate(powerupId)}
                       disabled={isActive || onCooldown}
-                      className={`w-full py-1.5 rounded-lg text-sm font-semibold transition-colors ${
+                      className={`w-full py-1.5 rounded-custom-radius text-sm font-semibold transition-colors ${
                         isActive || onCooldown
                           ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                           : 'bg-purple-600 hover:bg-purple-700 text-white'

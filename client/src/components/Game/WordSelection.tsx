@@ -62,7 +62,7 @@ export const WordSelection: React.FC<WordSelectionProps> = ({ wordOptions, onSel
           <button
             key={index}
             onClick={() => onSelectWord(wordObj.word)}
-            className={`relative bg-gradient-to-br ${getDifficultyColor(wordObj.difficulty)} text-white rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-200`}
+            className={`relative bg-gradient-to-br ${getDifficultyColor(wordObj.difficulty)} text-white rounded-custom-radius p-6 shadow-custom-shadow hover:shadow-custom-shadow transform transition-all duration-200`}
           >
             {/* Difficulty badge */}
             <div className="absolute top-2 right-2 text-2xl">
@@ -84,7 +84,7 @@ export const WordSelection: React.FC<WordSelectionProps> = ({ wordOptions, onSel
         ))}
       </div>
 
-      <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-custom-radius">
         <p className="text-sm text-blue-800">
           💡 <strong>Tip:</strong> Higher difficulty = More points for both you and the guessers!
         </p>

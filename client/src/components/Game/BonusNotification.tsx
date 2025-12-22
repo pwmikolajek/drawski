@@ -39,7 +39,7 @@ export const BonusNotification: React.FC<BonusNotificationProps> = ({
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
       }`}
     >
-      <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl shadow-2xl p-6 max-w-sm animate-bounce-in">
+      <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-custom-radius shadow-custom-shadow p-6 max-w-sm animate-bounce-in">
         {/* Header */}
         <div className="flex items-center gap-3 mb-4">
           <div className="text-4xl">🎉</div>
@@ -54,7 +54,7 @@ export const BonusNotification: React.FC<BonusNotificationProps> = ({
           {bonuses.map((bonus, index) => (
             <div
               key={index}
-              className="flex items-center justify-between bg-white/20 backdrop-blur-sm rounded-lg p-3 animate-slide-in"
+              className="flex items-center justify-between bg-white/20 backdrop-blur-sm rounded-custom-radius p-3 animate-slide-in"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="flex items-center gap-2">

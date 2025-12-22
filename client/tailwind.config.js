@@ -27,14 +27,23 @@ export default {
         'pulse-soft': {
           '0%, 100%': {
             opacity: '1',
-            boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+            boxShadow: '0 100px 80px 0 rgba(50, 70, 86, 0.04), 0 41.778px 33.422px 0 rgba(50, 70, 86, 0.03), 0 22.336px 17.869px 0 rgba(50, 70, 86, 0.02), 0 12.522px 10.017px 0 rgba(50, 70, 86, 0.02), 0 6.65px 5.32px 0 rgba(50, 70, 86, 0.02), 0 2.767px 2.214px 0 rgba(50, 70, 86, 0.01)',
           },
           '50%': {
             opacity: '0.9',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+            boxShadow: '0 100px 80px 0 rgba(50, 70, 86, 0.04), 0 41.778px 33.422px 0 rgba(50, 70, 86, 0.03), 0 22.336px 17.869px 0 rgba(50, 70, 86, 0.02), 0 12.522px 10.017px 0 rgba(50, 70, 86, 0.02), 0 6.65px 5.32px 0 rgba(50, 70, 86, 0.02), 0 2.767px 2.214px 0 rgba(50, 70, 86, 0.01)',
           },
         },
       },
+      boxShadow: {
+        'custom-shadow': '0 100px 80px 0 rgba(50, 70, 86, 0.04), 0 41.778px 33.422px 0 rgba(50, 70, 86, 0.03), 0 22.336px 17.869px 0 rgba(50, 70, 86, 0.02), 0 12.522px 10.017px 0 rgba(50, 70, 86, 0.02), 0 6.65px 5.32px 0 rgba(50, 70, 86, 0.02), 0 2.767px 2.214px 0 rgba(50, 70, 86, 0.01)',
+      },
+      borderRadius: {
+        'custom-radius': '8px',
+      },
+      backgroundImage: {
+        'custom-background': 'url(<path-to-image>) lightgray 50% / cover no-repeat',
+      }
     },
   },
   plugins: [],
